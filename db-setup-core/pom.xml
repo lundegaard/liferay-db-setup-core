@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.lundegaard.liferay</groupId>
+        <artifactId>liferay-db-setup-core</artifactId>
+        <version>2.0.0</version>
+    </parent>
 
-    <version>3.0.0-SNAPSHOT</version>
     <artifactId>db-setup-core</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <name>Liferay Portal DB Setup core</name>
-    <description>Library that allows to declare a set of Liferay data to be created and create them using the API.
+    <description>
+        Library that allows to declare a set of Liferay data to be created and create them using the API.
     </description>
     <inceptionYear>2016</inceptionYear>
 
-    <packaging>jar</packaging>
-
-    <parent>
-        <groupId>com.mimacom.liferay</groupId>
-        <artifactId>build-parent</artifactId>
-        <version>2.0.0</version>
-    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.kernel</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.journal.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.dynamic.data.lists.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.dynamic.data.mapping.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.portlet.display.template.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.impl</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -34,7 +80,7 @@
                 <configuration>
                     <outputDirectory>${project.build.directory}/generated-sources/sources</outputDirectory>
                     <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
-                    <packageName>com.mimacom.liferay.portal.setup.domain</packageName>
+                    <packageName>eu.lundegaard.liferay.db.setup.domain</packageName>
                     <clearOutputDir>false</clearOutputDir>
                 </configuration>
             </plugin>
@@ -95,58 +141,20 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>com.liferay.portal.kernel</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay</groupId>
-            <artifactId>com.liferay.journal.api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay</groupId>
-            <artifactId>com.liferay.dynamic.data.lists.api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay</groupId>
-            <artifactId>com.liferay.dynamic.data.mapping.api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay</groupId>
-            <artifactId>com.liferay.portlet.display.template.api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.portlet</groupId>
-            <artifactId>portlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>com.liferay.portal.impl</artifactId>
-        </dependency>
-    </dependencies>
-    <scm>
-        <url>https://github.com/mimacom/liferay-db-setup-core</url>
-    </scm>
     <organization>
-        <name>mimacom ag</name>
-        <url>http://www.mimacom.com</url>
+        <name>Lundegaard a.s.</name>
+        <url>https://www.lundegaard.eu</url>
     </organization>
+
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://jira.lnd.bz</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://jenkins.lnd.bz</url>
+    </ciManagement>
 
     <licenses>
         <license>
@@ -156,5 +164,21 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>roman.srom</id>
+            <name>Roman Šrom</name>
+            <email>roman.srom@lundegaard.eu</email>
+            <organization>Lundegaard a.s.</organization>
+            <organizationUrl>https://www.lundegaard.eu</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/lundegaard/liferay-db-setup-core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:lundegaard/liferay-db-setup-core.git</developerConnection>
+        <url>https://github.com/lundegaard/liferay-db-setup-core</url>
+    </scm>
 
 </project>

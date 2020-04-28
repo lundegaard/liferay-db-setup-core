@@ -19,7 +19,7 @@ We didn't publish binary yet so you'll need to build the jar yourself. Here are 
 ```
 
 ## Integration
-Run <code>com.mimacom.liferay.portal.setup.LiferaySetup#setup(java.io.File)</code> with following xml configuration:
+Run <code>LiferaySetup#setup(java.io.File)</code> with following xml configuration:
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <setup xmlns="http://www.mimacom.com/liferay/setup">

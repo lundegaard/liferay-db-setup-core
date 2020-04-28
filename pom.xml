@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mimacom.liferay</groupId>
-    <artifactId>build-parent</artifactId>
+    <groupId>eu.lundegaard.liferay</groupId>
+    <artifactId>liferay-db-setup-core</artifactId>
     <version>2.0.0</version>
     <packaging>pom</packaging>
 
@@ -31,16 +31,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>mimacom-repo-id-deploy-open</id>
-            <url>${mimacom-deploy-path-releases-open}</url>
-        </repository>
-        <snapshotRepository>
-            <id>mimacom-repo-id-deploy-open</id>
-            <url>${mimacom-deploy-path-snapshots-open}</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
