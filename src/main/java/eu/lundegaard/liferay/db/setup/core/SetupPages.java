@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -48,7 +45,6 @@ import eu.lundegaard.liferay.db.setup.core.util.ResolverUtil;
 import eu.lundegaard.liferay.db.setup.core.util.FieldMapUtil;
 import eu.lundegaard.liferay.db.setup.domain.*;
 import eu.lundegaard.liferay.db.setup.domain.Theme;
-
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 import java.io.IOException;
@@ -59,6 +55,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public final class SetupPages {
+
     private static final Log LOG = LogFactoryUtil.getLog(SetupPages.class);
     private static final HashMap<String, List<String>> DEFAULT_PERMISSIONS_PUBLIC;
     private static final HashMap<String, List<String>> DEFAULT_PERMISSIONS_PRIVATE;
@@ -109,7 +106,7 @@ public final class SetupPages {
      * @throws PortalException
      */
     public static void setupSitePages(final Site site, final long groupId,
-                                      final long company, final long userid) throws SystemException, PortalException {
+            final long company, final long userid) throws SystemException, PortalException {
 
         PublicPages publicPages = site.getPublicPages();
         if (publicPages != null) {
@@ -120,7 +117,8 @@ public final class SetupPages {
                 LOG.info("Setup: Deleting pages from site " + site.getName());
                 deletePages(groupId, false);
             }
-            addPages(publicPages.getPage(), publicPages.getDefaultLayout(), publicPages.getDefaultLayoutContainedInThemeWithId(),
+            addPages(publicPages.getPage(), publicPages.getDefaultLayout(),
+                    publicPages.getDefaultLayoutContainedInThemeWithId(),
                     groupId, false, 0, company, userid);
             if (publicPages.getVirtualHost() != null) {
                 LayoutSetLocalServiceUtil.updateVirtualHost(groupId, false, publicPages.getVirtualHost());
@@ -136,7 +134,8 @@ public final class SetupPages {
                 LOG.info("Setup: Deleting pages from site " + site.getName());
                 deletePages(groupId, true);
             }
-            addPages(privatePages.getPage(), privatePages.getDefaultLayout(), privatePages.getDefaultLayoutContainedInThemeWithId(),
+            addPages(privatePages.getPage(), privatePages.getDefaultLayout(),
+                    privatePages.getDefaultLayoutContainedInThemeWithId(),
                     groupId, true, 0, company, userid);
             if (privatePages.getVirtualHost() != null) {
                 LayoutSetLocalServiceUtil.updateVirtualHost(groupId, true, privatePages.getVirtualHost());
@@ -148,12 +147,12 @@ public final class SetupPages {
      * Set the page templates up. As this is heavily based on page (layout).
      *
      * @param pageTemplates The page template definitions that are imported.
-     * @param groupId       The group id of the site where to import the
-     * @param company       The id of the company to which the templates are imported.
-     * @param userid        The user id of the importing user.
+     * @param groupId The group id of the site where to import the
+     * @param company The id of the company to which the templates are imported.
+     * @param userid The user id of the importing user.
      */
     public static void setupPageTemplates(final PageTemplates pageTemplates, final long groupId,
-                                          final long company, final long userid) {
+            final long company, final long userid) {
         try {
             for (PageTemplate pageTemplate : pageTemplates.getPageTemplate()) {
                 String name = pageTemplate.getName();
@@ -228,9 +227,10 @@ public final class SetupPages {
      * @throws SystemException
      * @throws PortalException
      */
-    private static void addPages(final List<Page> pages, String defaultLayout, String defaultLayoutContainedInThemeWithId,
-                                 final long groupId, final boolean isPrivate, final long parentLayoutId, final long company,
-                                 final long userId) throws SystemException, PortalException {
+    private static void addPages(final List<Page> pages, String defaultLayout,
+            String defaultLayoutContainedInThemeWithId,
+            final long groupId, final boolean isPrivate, final long parentLayoutId, final long company,
+            final long userId) throws SystemException, PortalException {
 
         for (Page page : pages) {
 
@@ -268,14 +268,15 @@ public final class SetupPages {
                 defaultLayout = page.getLayout();
                 defaultLayoutContainedInThemeWithId = page.getLayoutContainedInThemeWithId();
             }
-            setupLiferayPage(layout, page, defaultLayout, defaultLayoutContainedInThemeWithId, groupId, isPrivate, company, userId, null);
+            setupLiferayPage(layout, page, defaultLayout, defaultLayoutContainedInThemeWithId, groupId, isPrivate,
+                    company, userId, null);
         }
     }
 
     private static void setupLiferayPage(final Layout layout, final Page page, final String defaultLayout,
-                                         final String defaultLayoutContainedInThemeWithId, final long groupId,
-                                         final boolean isPrivate, final long company, final long userId,
-                                         final String pageTemplateName) throws SystemException, PortalException {
+            final String defaultLayoutContainedInThemeWithId, final long groupId,
+            final boolean isPrivate, final long company, final long userId,
+            final String pageTemplateName) throws SystemException, PortalException {
         if (page.getTheme() != null) {
             setPageTheme(layout, page);
         }
@@ -325,7 +326,7 @@ public final class SetupPages {
     }
 
     private static Layout createLinkPage(final Page p, final long groupId,
-                                         final long parentLayoutId, final long userId) {
+            final long parentLayoutId, final long userId) {
         // all values are usually retrieved via special methods from our code
         // for better readability I have added the real values here
 
@@ -379,11 +380,11 @@ public final class SetupPages {
     }
 
     private static Layout createPage(final long groupId, final Page currentPage,
-                                     final long parentLayoutId, final boolean isPrivate)
+            final long parentLayoutId, final boolean isPrivate)
             throws SystemException, PortalException {
 
         Map<Locale, String> titleMap = FieldMapUtil.getTitleMap(currentPage.getTitleTranslation(), groupId,
-                                                                currentPage.getName(), " Page with title " + currentPage.getFriendlyURL());
+                currentPage.getName(), " Page with title " + currentPage.getFriendlyURL());
 
         Locale locale = LocaleUtil.getSiteDefault();
 
@@ -393,12 +394,14 @@ public final class SetupPages {
         Map<Locale, String> friendlyURLMap = new HashMap<>();
         friendlyURLMap.put(locale, currentPage.getFriendlyURL());
 
-        return LayoutLocalServiceUtil.addLayout(LiferaySetup.getRunAsUserId(), groupId, isPrivate, parentLayoutId, titleMap,titleMap, null,
-                null, null, currentPage.getType(), StringPool.BLANK, currentPage.isHidden(), friendlyURLMap, new ServiceContext());
+        return LayoutLocalServiceUtil.addLayout(LiferaySetup.getRunAsUserId(), groupId, isPrivate, parentLayoutId,
+                titleMap, titleMap, null,
+                null, null, currentPage.getType(), StringPool.BLANK, currentPage.isHidden(), friendlyURLMap,
+                new ServiceContext());
     }
 
     private static void setCustomFields(final long runAsUserId, final long groupId,
-                                        final long company, final Page page, final Layout layout) {
+            final long company, final Page page, final Layout layout) {
         Class clazz = Layout.class;
         String resolverHint = "Resolving customized value for page " + page.getFriendlyURL() + " "
                 + "failed for key " + "%%key%% and value %%value%%";
@@ -440,7 +443,7 @@ public final class SetupPages {
     }
 
     private static void addPortletIntoPage(final Page page, final Layout layout,
-                                           final Pageportlet portlet, final long companyId, final long groupId)
+            final Pageportlet portlet, final long companyId, final long groupId)
             throws SystemException, ValidatorException, IOException, PortalException {
         if (page.getLinkToURL() != null && !page.getLinkToURL().equals("")) {
             LOG.error("This is a link page! It cannot be cleared. If you intend to use this page "
@@ -468,7 +471,8 @@ public final class SetupPages {
                 LOG.error("Add portlet error ", e);
             }
 
-            javax.portlet.PortletPreferences preferences = PortletPreferencesLocalServiceUtil.getPreferences(companyId, ownerId, ownerType, plid, portletIdInc);
+            javax.portlet.PortletPreferences preferences = PortletPreferencesLocalServiceUtil.getPreferences(companyId,
+                    ownerId, ownerType, plid, portletIdInc);
             List<PortletPreference> prefsList = portlet.getPortletPreference();
             for (PortletPreference p : prefsList) {
                 try {
@@ -501,26 +505,24 @@ public final class SetupPages {
      * </li>
      * <li>{{$ART-STRUCTURE-ID-BY-KEY=&lt; value of article structure key &gt;
      * }}</li>
-     * <li>{{$ADT-TEMPLATE-ID-BY-KEY= &lt; value of ADT template key &gt; }}
-     * </li>
-     * <li>{{$ADT-TEMPLATE-UUID-BY-KEY= &lt; value of ADT template key &gt; }}
-     * </li>
-     * <li>{{$FILE= [value of the site scope in for of ::SITENAME::] &lt; value
-     * of path and title of the refered document &gt; }}</li>
+     * <li>{{$ADT-TEMPLATE-ID-BY-KEY= &lt; value of ADT template key &gt; }}</li>
+     * <li>{{$ADT-TEMPLATE-UUID-BY-KEY= &lt; value of ADT template key &gt; }}</li>
+     * <li>{{$FILE= [value of the site scope in for of ::SITENAME::] &lt; value of
+     * path and title of the refered document &gt; }}</li>
      * </ul>
      *
-     * @param key         The portlet key.
-     * @param value       The defined value which should be parametrized.
-     * @param portlet     The pageportlet definition.
-     * @param company     Id of the company.
-     * @param groupId     The group id.
+     * @param key The portlet key.
+     * @param value The defined value which should be parametrized.
+     * @param portlet The pageportlet definition.
+     * @param company Id of the company.
+     * @param groupId The group id.
      * @param runAsUserId The user id which import the data.
      *
      * @return
      */
     private static String resolvePortletPrefValue(final String key, final String value,
-                                                  final Pageportlet portlet, final long company, final long groupId,
-                                                  final long runAsUserId) {
+            final Pageportlet portlet, final long company, final long groupId,
+            final long runAsUserId) {
         String locationHint = "Key: " + key + " of portlet " + portlet.getPortletId();
         return ResolverUtil.lookupAll(runAsUserId, groupId, company, value, locationHint);
     }
@@ -577,7 +579,7 @@ public final class SetupPages {
     }
 
     private static void removeAllPortlets(final long runasUser,
-                                          final LayoutTypePortlet layoutTypePortlet, final Layout layout) {
+            final LayoutTypePortlet layoutTypePortlet, final Layout layout) {
         List<Portlet> portlets = null;
         try {
             portlets = layoutTypePortlet.getAllPortlets();

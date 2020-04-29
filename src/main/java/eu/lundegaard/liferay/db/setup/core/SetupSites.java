@@ -1,11 +1,8 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -21,10 +18,10 @@ package eu.lundegaard.liferay.db.setup.core;
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.exportimport.kernel.service.StagingLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -44,7 +41,6 @@ import eu.lundegaard.liferay.db.setup.core.util.CustomFieldSettingUtil;
 import eu.lundegaard.liferay.db.setup.core.util.PortletConstants;
 import eu.lundegaard.liferay.db.setup.core.util.FieldMapUtil;
 import eu.lundegaard.liferay.db.setup.domain.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +59,8 @@ public class SetupSites {
 
     }
 
-    public static void setupSites(final List<eu.lundegaard.liferay.db.setup.domain.Site> groups, final Group parentGroup) {
+    public static void setupSites(final List<eu.lundegaard.liferay.db.setup.domain.Site> groups,
+            final Group parentGroup) {
 
         CompanyThreadLocal.setCompanyId(COMPANY_ID);
         for (eu.lundegaard.liferay.db.setup.domain.Site site : groups) {
@@ -95,7 +92,9 @@ public class SetupSites {
 
                     liferayGroup = GroupLocalServiceUtil.addGroup(
                             defaultUserId, GroupConstants.DEFAULT_PARENT_GROUP_ID, Group.class.getName(),
-                            0, 0, FieldMapUtil.getLocalizationMap(site.getName()), null, GroupConstants.TYPE_SITE_RESTRICTED, true, GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION, site.getSiteFriendlyUrl(), true, true, serviceContext);
+                            0, 0, FieldMapUtil.getLocalizationMap(site.getName()), null,
+                            GroupConstants.TYPE_SITE_RESTRICTED, true, GroupConstants.DEFAULT_MEMBERSHIP_RESTRICTION,
+                            site.getSiteFriendlyUrl(), true, true, serviceContext);
                     LOG.info("New Organization created. Group ID: " + groupId);
                 } else {
                     LOG.info("Setup: Updating " + site.getName());
@@ -182,14 +181,16 @@ public class SetupSites {
         for (UserAsMember memberUser : memberUsers) {
             User user = UserLocalServiceUtil.fetchUserByScreenName(companyId, memberUser.getScreenName());
             if (Objects.isNull(user)) {
-                LOG.error("User with screenName " + memberUser.getScreenName() + " does not exists. Won't be assigned as site member.");
+                LOG.error("User with screenName " + memberUser.getScreenName()
+                        + " does not exists. Won't be assigned as site member.");
                 continue;
             }
 
             try {
                 Group liferayGroup = GroupLocalServiceUtil.getGroup(groupId);
                 GroupLocalServiceUtil.addUserGroup(user.getUserId(), liferayGroup.getGroupId());
-                LOG.info("User " + user.getScreenName() + " was assigned as member of site " + liferayGroup.getDescriptiveName());
+                LOG.info("User " + user.getScreenName() + " was assigned as member of site "
+                        + liferayGroup.getDescriptiveName());
 
                 assignUserMemberRoles(memberUser.getRole(), companyId, liferayGroup, user);
 
@@ -200,15 +201,18 @@ public class SetupSites {
         }
     }
 
-    private static void assignUserMemberRoles(List<Role> membershipRoles, long companyId, Group liferayGroup, User liferayUser) {
+    private static void assignUserMemberRoles(List<Role> membershipRoles, long companyId, Group liferayGroup,
+            User liferayUser) {
         if (Objects.isNull(membershipRoles) || membershipRoles.isEmpty()) {
             return;
         }
 
         for (Role membershipRole : membershipRoles) {
             try {
-                com.liferay.portal.kernel.model.Role liferayRole = RoleLocalServiceUtil.getRole(companyId, membershipRole.getName());
-                UserGroupRoleLocalServiceUtil.addUserGroupRoles(liferayUser.getUserId(), liferayGroup.getGroupId(), new long[]{liferayRole.getRoleId()});
+                com.liferay.portal.kernel.model.Role liferayRole =
+                        RoleLocalServiceUtil.getRole(companyId, membershipRole.getName());
+                UserGroupRoleLocalServiceUtil.addUserGroupRoles(liferayUser.getUserId(), liferayGroup.getGroupId(),
+                        new long[] {liferayRole.getRoleId()});
                 StringBuilder sb = new StringBuilder("Role ")
                         .append(liferayRole.getDescriptiveName())
                         .append(" assigned to User ")
@@ -218,7 +222,8 @@ public class SetupSites {
 
                 LOG.info(sb.toString());
             } catch (PortalException e) {
-                LOG.error("Can not add role with name" + membershipRole.getName() + " does not exists. Will not be assigned.");
+                LOG.error("Can not add role with name" + membershipRole.getName()
+                        + " does not exists. Will not be assigned.");
             }
         }
 
@@ -231,28 +236,34 @@ public class SetupSites {
 
         for (UsergroupAsMember memberGroup : memberGroups) {
             try {
-                UserGroup liferayUserGroup = UserGroupLocalServiceUtil.getUserGroup(companyId, memberGroup.getUsergroupName());
+                UserGroup liferayUserGroup =
+                        UserGroupLocalServiceUtil.getUserGroup(companyId, memberGroup.getUsergroupName());
                 Group liferayGroup = GroupLocalServiceUtil.getGroup(groupId);
                 GroupLocalServiceUtil.addUserGroupGroup(liferayUserGroup.getUserGroupId(), liferayGroup);
-                LOG.info("UserGroup " + liferayUserGroup.getName() + " was assigned as site member to " + liferayGroup.getDescriptiveName());
+                LOG.info("UserGroup " + liferayUserGroup.getName() + " was assigned as site member to "
+                        + liferayGroup.getDescriptiveName());
 
                 assignGroupMemberRoles(memberGroup.getRole(), companyId, liferayGroup, liferayUserGroup);
             } catch (PortalException e) {
-                LOG.error("Cannot find UserGroup with name: " + memberGroup.getUsergroupName() + ". Group won't be assigned to site.", e);
+                LOG.error("Cannot find UserGroup with name: " + memberGroup.getUsergroupName()
+                        + ". Group won't be assigned to site.", e);
                 continue;
             }
         }
     }
 
-    private static void assignGroupMemberRoles(List<Role> membershipRoles, long companyId, Group liferayGroup, UserGroup liferayUserGroup) {
+    private static void assignGroupMemberRoles(List<Role> membershipRoles, long companyId, Group liferayGroup,
+            UserGroup liferayUserGroup) {
         if (Objects.isNull(membershipRoles) || membershipRoles.isEmpty()) {
             return;
         }
 
         for (Role membershipRole : membershipRoles) {
             try {
-                com.liferay.portal.kernel.model.Role liferayRole = RoleLocalServiceUtil.getRole(companyId, membershipRole.getName());
-                UserGroupGroupRoleLocalServiceUtil.addUserGroupGroupRoles(liferayUserGroup.getUserGroupId(), liferayGroup.getGroupId(), new long[]{liferayRole.getRoleId()});
+                com.liferay.portal.kernel.model.Role liferayRole =
+                        RoleLocalServiceUtil.getRole(companyId, membershipRole.getName());
+                UserGroupGroupRoleLocalServiceUtil.addUserGroupGroupRoles(liferayUserGroup.getUserGroupId(),
+                        liferayGroup.getGroupId(), new long[] {liferayRole.getRoleId()});
                 StringBuilder sb = new StringBuilder("Role ")
                         .append(liferayRole.getDescriptiveName())
                         .append(" assigned to UserGroup ")
@@ -262,7 +273,8 @@ public class SetupSites {
 
                 LOG.info(sb.toString());
             } catch (PortalException e) {
-                LOG.error("Can not add role with name" + membershipRole.getName() + " does not exists. Will not be assigned.");
+                LOG.error("Can not add role with name" + membershipRole.getName()
+                        + " does not exists. Will not be assigned.");
             }
         }
     }
@@ -278,22 +290,30 @@ public class SetupSites {
         try {
             if (staging.getType().equals("local")) {
                 ServiceContext serviceContext = new ServiceContext();
-                serviceContext.setAttribute(PortletConstants.STAGING_PARAM_TEMPLATE.replace("#", "com_liferay_dynamic_data_mapping_web_portlet_PortletDisplayTemplatePortlet"), staging.isStageAdt());
+                serviceContext.setAttribute(
+                        PortletConstants.STAGING_PARAM_TEMPLATE.replace("#",
+                                "com_liferay_dynamic_data_mapping_web_portlet_PortletDisplayTemplatePortlet"),
+                        staging.isStageAdt());
 
                 setStagingParam(staging.isStageAdt(), PortletConstants.STAGING_PORTLET_ID_ADT, serviceContext);
                 setStagingParam(staging.isStageBlogs(), PortletConstants.STAGING_PORTLET_ID_BLOGS, serviceContext);
-                setStagingParam(staging.isStageBookmarks(), PortletConstants.STAGING_PORTLET_ID_BOOKMARKS, serviceContext);
-                setStagingParam(staging.isStageCalendar(), PortletConstants.STAGING_PORTLET_ID_CALENDAR, serviceContext);
+                setStagingParam(staging.isStageBookmarks(), PortletConstants.STAGING_PORTLET_ID_BOOKMARKS,
+                        serviceContext);
+                setStagingParam(staging.isStageCalendar(), PortletConstants.STAGING_PORTLET_ID_CALENDAR,
+                        serviceContext);
                 setStagingParam(staging.isStageDdl(), PortletConstants.STAGING_PORTLET_ID_DDL, serviceContext);
-                setStagingParam(staging.isStageDocumentLibrary(), PortletConstants.STAGING_PORTLET_ID_DL, serviceContext);
+                setStagingParam(staging.isStageDocumentLibrary(), PortletConstants.STAGING_PORTLET_ID_DL,
+                        serviceContext);
                 setStagingParam(staging.isStageForms(), PortletConstants.STAGING_PORTLET_ID_FORMS, serviceContext);
                 setStagingParam(staging.isStageMessageBoards(), PortletConstants.STAGING_PORTLET_ID_MB, serviceContext);
                 setStagingParam(staging.isStageMobileRules(), PortletConstants.STAGING_PORTLET_ID_MDR, serviceContext);
                 setStagingParam(staging.isStagePolls(), PortletConstants.STAGING_PORTLET_ID_POLLS, serviceContext);
-                setStagingParam(staging.isStageWebContent(), PortletConstants.STAGING_PORTLET_ID_WEB_CONTENT, serviceContext);
+                setStagingParam(staging.isStageWebContent(), PortletConstants.STAGING_PORTLET_ID_WEB_CONTENT,
+                        serviceContext);
                 setStagingParam(staging.isStageWiki(), PortletConstants.STAGING_PORTLET_ID_WIKI, serviceContext);
 
-                StagingLocalServiceUtil.enableLocalStaging(userId, liveGroup, staging.isBranchingPublic(), staging.isBranchingPrivate(), serviceContext);
+                StagingLocalServiceUtil.enableLocalStaging(userId, liveGroup, staging.isBranchingPublic(),
+                        staging.isBranchingPrivate(), serviceContext);
                 LOG.info("Local staging switched on.");
             }
             if (staging.getType().equals("remote")) {
@@ -313,11 +333,12 @@ public class SetupSites {
     }
 
     private static void setStagingParam(boolean isParamOn, String portletId, ServiceContext serviceContext) {
-        serviceContext.setAttribute(PortletConstants.STAGING_PARAM_TEMPLATE.replace("#", portletId), String.valueOf(isParamOn));
+        serviceContext.setAttribute(PortletConstants.STAGING_PARAM_TEMPLATE.replace("#", portletId),
+                String.valueOf(isParamOn));
     }
 
     static void setCustomFields(final long runAsUserId, final long groupId,
-                                final long company, final Site site) {
+            final long company, final Site site) {
         if (site.getCustomFieldSetting() == null || site.getCustomFieldSetting().isEmpty()) {
             LOG.info("Site does has no Expando field settings.");
         } else {

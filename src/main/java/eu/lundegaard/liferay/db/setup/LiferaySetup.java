@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -52,7 +49,6 @@ import eu.lundegaard.liferay.db.setup.core.SetupSites;
 import eu.lundegaard.liferay.db.setup.core.SetupUserGroups;
 import eu.lundegaard.liferay.db.setup.core.SetupUsers;
 import org.xml.sax.SAXException;
-
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
@@ -74,7 +70,8 @@ public final class LiferaySetup {
 
     }
 
-    public static void setupFiles(final List<File> files) throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
+    public static void setupFiles(final List<File> files)
+            throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
 
         List<Setup> setups = new ArrayList<>();
         for (File file : files) {
@@ -84,12 +81,14 @@ public final class LiferaySetup {
         setup(setups);
     }
 
-    public static void setup(final File file) throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
+    public static void setup(final File file)
+            throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
 
         setupFiles(Arrays.asList(file));
     }
 
-    public static void setupInputStreams(final List<InputStream> inputStreams) throws ParserConfigurationException, SAXException, JAXBException {
+    public static void setupInputStreams(final List<InputStream> inputStreams)
+            throws ParserConfigurationException, SAXException, JAXBException {
 
         List<Setup> setups = new ArrayList<>();
         for (InputStream inputStream : inputStreams) {
@@ -99,7 +98,8 @@ public final class LiferaySetup {
         setup(setups);
     }
 
-    public static void setup(final InputStream inputStream) throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
+    public static void setup(final InputStream inputStream)
+            throws FileNotFoundException, ParserConfigurationException, SAXException, JAXBException {
 
         setupInputStreams(Arrays.asList(inputStream));
     }
@@ -228,8 +228,8 @@ public final class LiferaySetup {
      * Returns Liferay user, that has Administrator role assigned.
      *
      * @param companyId company ID
-     * @return Liferay {@link eu.lundegaard.liferay.db.setup.domain.User}
-     * instance, if no user is found, returns null
+     * @return Liferay {@link eu.lundegaard.liferay.db.setup.domain.User} instance,
+     *         if no user is found, returns null
      * @throws Exception if cannot obtain permission checker
      */
     private static User getAdminUser(final long companyId) throws Exception {

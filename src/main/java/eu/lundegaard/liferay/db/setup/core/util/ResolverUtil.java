@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core.util;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core.util;
 
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.model.AssetEntry;
@@ -57,7 +54,6 @@ import com.liferay.portal.kernel.service.LayoutLocalServiceUtil;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,73 +83,71 @@ public final class ResolverUtil {
 
     // CHECKSTYLE:ON
 
-    private ResolverUtil() {
-    }
+    private ResolverUtil() {}
 
     /**
-     * Resolves a value with a given key inside a given content. Every occurance
-     * of one of the following expressions is substituted by the resolved value:
+     * Resolves a value with a given key inside a given content. Every occurance of
+     * one of the following expressions is substituted by the resolved value:
      * <ul>
-     * <li>{{$ARTICLE-ID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article id
-     * to look for &gt; $}}</li>
-     * <li>{{$ARTICLE-UUIID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article
-     * id to look for &gt;$}}</li>
-     * <li>{{$ARTICLE-RESID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article
-     * id to look for &gt;$}}</li>
-     * <li>{{$ART-TEMPLATE-ID-BY-KEY=[:: name of the site ::]&lt; article id to
+     * <li>{{$ARTICLE-ID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article id to
      * look for &gt; $}}</li>
-     * <li>{{$ART-TEMPLATE-UUID-BY-KEY=[:: name of the site ::]&lt; article id
-     * to look for &gt; $}}</li>
+     * <li>{{$ARTICLE-UUIID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article id to
+     * look for &gt;$}}</li>
+     * <li>{{$ARTICLE-RESID-BY-ARTICLE-ID=[:: name of the site ::]&lt; article id to
+     * look for &gt;$}}</li>
+     * <li>{{$ART-TEMPLATE-ID-BY-KEY=[:: name of the site ::]&lt; article id to look
+     * for &gt; $}}</li>
+     * <li>{{$ART-TEMPLATE-UUID-BY-KEY=[:: name of the site ::]&lt; article id to
+     * look for &gt; $}}</li>
      * <li>{{$ART-STRUCTURE-ID-BY-KEY=[:: name of the site ::]&lt; article id to
      * look for &gt; $}}</li>
-     * <li>{{$ART-STRUCTURE-UUID-BY-KEY=[:: name of the site ::]&lt; article id
-     * to look for &gt; $}}</li>
-     * <li>{{$ADT-TEMPLATE-ID-BY-KEY=[:: name of the site ::]&lt; article id to
+     * <li>{{$ART-STRUCTURE-UUID-BY-KEY=[:: name of the site ::]&lt; article id to
      * look for &gt; $}}</li>
-     * <li>{{$ADT-TEMPLATE-UUID-BY-KEY=[:: name of the site ::]&lt; article id
-     * to look for &gt; $}}</li>
-     * <li>{{$FILE-JSON=[:: name of the site ::]&lt; documents and media folder
-     * path to the file &gt;&lt; documents and media folder title of the file
+     * <li>{{$ADT-TEMPLATE-ID-BY-KEY=[:: name of the site ::]&lt; article id to look
+     * for &gt; $}}</li>
+     * <li>{{$ADT-TEMPLATE-UUID-BY-KEY=[:: name of the site ::]&lt; article id to
+     * look for &gt; $}}</li>
+     * <li>{{$FILE-JSON=[:: name of the site ::]&lt; documents and media folder path
+     * to the file &gt;&lt; documents and media folder title of the file
      * &gt;$}}</li>
-     * <li>{{$FILE-ID=[:: name of the site ::]&lt; documents and media folder
-     * path to the file &gt;&lt; documents and media folder title of the file
+     * <li>{{$FILE-ID=[:: name of the site ::]&lt; documents and media folder path
+     * to the file &gt;&lt; documents and media folder title of the file
      * &gt;$}}</li>
-     * <li>{{$FILE-UUID=[:: name of the site ::]&lt; documents and media folder
-     * path to the file &gt;&lt; documents and media folder title of the file
+     * <li>{{$FILE-UUID=[:: name of the site ::]&lt; documents and media folder path
+     * to the file &gt;&lt; documents and media folder title of the file
      * &gt;$}}</li>
      * <li>{{$CLASS-ID-BY-NAME=&lt; fully qualified class name &gt;$}}</li>
-     * <li>{{$PRIV-PAGE-ID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly
+     * <li>{{$PRIV-PAGE-ID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly url
+     * of the private page &gt;$}}</li>
+     * <li>{{$PUB-PAGE-ID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly url
+     * of the public page &gt;$}}</li>
+     * <li>{{$PRIV-PAGE-PLID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly
      * url of the private page &gt;$}}</li>
-     * <li>{{$PUB-PAGE-ID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly
+     * <li>{{$PUB-PAGE-PLID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly
      * url of the public page &gt;$}}</li>
-     * <li>{{$PRIV-PAGE-PLID-BY-FRIENDLY_URL=[:: name of the site ::]&lt;
-     * friendly url of the private page &gt;$}}</li>
-     * <li>{{$PUB-PAGE-PLID-BY-FRIENDLY_URL=[:: name of the site ::]&lt;
-     * friendly url of the public page &gt;$}}</li>
-     * <li>{{$PUB-PAGE-UUID-BY-FRIENDLY_URL=[:: name of the site ::]&lt;
-     * friendly url of the public page &gt;$}}</li>
+     * <li>{{$PUB-PAGE-UUID-BY-FRIENDLY_URL=[:: name of the site ::]&lt; friendly
+     * url of the public page &gt;$}}</li>
      * <li>{{$DDL-REC-SET-ID-BY-KEYL=[:: name of the site ::]&lt; key of the DDL
      * record set &gt; $}}</li>
      * <li>{{ID_OF_ORG_WITH_NAME=&lt; name of the organization &gt;$}}</li>
      * <li>{{UUID_OF_ORG_WITH_NAME=&lt; name of the organization &gt;$}}</li>
      * <li>{{ID_OF_USER_GROUP_WITH_NAME=&lt; name of the user group &gt;$}}</li>
-     * <li>{{UUDID_OF_USER_GROUP_WITH_NAME=&lt; name of the user group &gt;$}}
-     * </li>
+     * <li>{{UUDID_OF_USER_GROUP_WITH_NAME=&lt; name of the user group &gt;$}}</li>
      * </ul>
      *
-     * @param runAsUserId  The user id under which the look up is done.
-     * @param groupId      the group id which is used by default for the look up.
-     * @param company      the company id that is used for the default look up.
-     * @param value        the value string in which the occurance of any above resolve
-     *                     expression is resolved.
-     * @param resolverHint the resovler hint textually specifies where the value is from
-     *                     and is used for logging problems or infos on the resolution.
+     * @param runAsUserId The user id under which the look up is done.
+     * @param groupId the group id which is used by default for the look up.
+     * @param company the company id that is used for the default look up.
+     * @param value the value string in which the occurance of any above resolve
+     *        expression is resolved.
+     * @param resolverHint the resovler hint textually specifies where the value is
+     *        from and is used for logging problems or infos on the resolution.
      *
-     * @return Returns the string value with any resolver expression resolved to
-     * the corresponding elements.
+     * @return Returns the string value with any resolver expression resolved to the
+     *         corresponding elements.
      */
     public static String lookupAll(final long runAsUserId, final long groupId, final long company,
-                                   final String value, final String resolverHint) {
+            final String value, final String resolverHint) {
         String retVal = value;
 
         // substitute references to groups/sites
@@ -178,7 +172,7 @@ public final class ResolverUtil {
                 company, false, "ADT", true, AssetEntry.class);
 
         //Resolve categories
-        retVal=ResolverUtil.substituteCategoryNameWithCategoryId(retVal,resolverHint,groupId,company,runAsUserId);
+        retVal = ResolverUtil.substituteCategoryNameWithCategoryId(retVal, resolverHint, groupId, company, runAsUserId);
 
         // Substitute the article key with the primary key (id)
         retVal = ResolverUtil.lookupArticleWithArticleId(retVal, resolverHint, groupId, company,
@@ -260,7 +254,7 @@ public final class ResolverUtil {
     }
 
     public static long getSiteGroupIdByName(final String siteName, final long company,
-                                            final String locationName) {
+            final String locationName) {
         long siteGroupId = 0;
 
         if (siteName.toLowerCase().equals("global")) {
@@ -295,31 +289,31 @@ public final class ResolverUtil {
             return DEFAULT_GROUP_NAME;
         }
         // WAS needed till version 2.0.x when Organizations were used instead of Sites
-//        return siteName + " LFR_ORGANIZATION";
+        //        return siteName + " LFR_ORGANIZATION";
         return siteName;
     }
 
     /**
-     * Substitutes all references for documents and media files. A file
-     * reference must have the following format in BNF: <br/>
+     * Substitutes all references for documents and media files. A file reference
+     * must have the following format in BNF: <br/>
      * fileReference ::= "{{$FILE=" siteReference+ filePath "$}}"<br/>
      * siteReference ::= "::" &lt; site-name &gt; "::"<br/>
      * filePath ::= ("/" &lt; path-segment &gt;)*<br/>
      * <br/>
      *
-     * @param content      The content of the article.
-     * @param locationHint A location hint where the substitution is done (for logging),
-     *                     eg., the file name of the article.
-     * @param groupId      The group id (site) in which scope the article is imported.
-     * @param company      The company id.
-     * @param repoId       The repository id.
-     * @param userId       The id of the importing user.
+     * @param content The content of the article.
+     * @param locationHint A location hint where the substitution is done (for
+     *        logging), eg., the file name of the article.
+     * @param groupId The group id (site) in which scope the article is imported.
+     * @param company The company id.
+     * @param repoId The repository id.
+     * @param userId The id of the importing user.
      *
      * @return Returns the content with all substituted file references.
      */
     public static String substituteFileReferencesWithURL(final String content,
-                                                         final String locationHint, final long groupId, final long company, final long repoId,
-                                                         final long userId, final int refType) {
+            final String locationHint, final long groupId, final long company, final long repoId,
+            final long userId, final int refType) {
         String openingTag = FILE_REFERENCE_JSON;
         if (refType == ID_TYPE_ID) {
             openingTag = FILE_REFERENCE_ID;
@@ -377,16 +371,14 @@ public final class ResolverUtil {
 
     private static String getFileEntryRef(FileEntry fe) {
         JSONObject feJsonObject = JSONUtil.put(
-                "classPK", fe.getFileEntryId()
-        ).put(
-                "groupId", fe.getGroupId()
-        ).put(
-                "title", fe.getTitle()
-        ).put(
-                "type", "document"
-        ).put(
-                "uuid", fe.getUuid()
-        );
+                "classPK", fe.getFileEntryId()).put(
+                        "groupId", fe.getGroupId())
+                .put(
+                        "title", fe.getTitle())
+                .put(
+                        "type", "document")
+                .put(
+                        "uuid", fe.getUuid());
         return feJsonObject.toString();
     }
 
@@ -395,42 +387,49 @@ public final class ResolverUtil {
             final long userId) {
         String openingTag = TEMPLATE_CATEGORY;
 
-        String result=content;
+        String result = content;
 
-        if (result.startsWith(openingTag)){
+        if (result.startsWith(openingTag)) {
 
-            String[] values=result.replace(CLOSING_TAG,"").split("::");
-            if(values.length==4) {
-                long groupIdResolved=groupId;
+            String[] values = result.replace(CLOSING_TAG, "").split("::");
+            if (values.length == 4) {
+                long groupIdResolved = groupId;
 
                 try {
-                    groupIdResolved=ResolverUtil.getSiteGroupIdByName(values[1], company, locationHint);
+                    groupIdResolved = ResolverUtil.getSiteGroupIdByName(values[1], company, locationHint);
 
                     try {
-                        AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getGroupVocabulary(groupIdResolved, values[2]);
+                        AssetVocabulary assetVocabulary =
+                                AssetVocabularyLocalServiceUtil.getGroupVocabulary(groupIdResolved, values[2]);
 
-                        String[] categoryIds=values[3].split("/");
+                        String[] categoryIds = values[3].split("/");
 
                         try {
-                            AssetCategory category= assetVocabulary.getCategories().stream().filter(vocabularyCategory->vocabularyCategory.getName().equals(categoryIds[0])).findFirst().orElseThrow(PortalException::new);
+                            AssetCategory category = assetVocabulary.getCategories().stream()
+                                    .filter(vocabularyCategory -> vocabularyCategory.getName().equals(categoryIds[0]))
+                                    .findFirst().orElseThrow(PortalException::new);
 
                             for (int i = 1; i < categoryIds.length; i++) {
-                                String categoryName=categoryIds[i];
-                                category=AssetCategoryLocalServiceUtil.getChildCategories(category.getCategoryId()).stream().filter(childrenCategory->childrenCategory.getName().equals(categoryName)).findFirst().orElseThrow(PortalException::new);
+                                String categoryName = categoryIds[i];
+                                category = AssetCategoryLocalServiceUtil.getChildCategories(category.getCategoryId())
+                                        .stream()
+                                        .filter(childrenCategory -> childrenCategory.getName().equals(categoryName))
+                                        .findFirst().orElseThrow(PortalException::new);
                             }
                             return String.valueOf(category.getCategoryId());
-                        }catch (PortalException e){
+                        } catch (PortalException e) {
                             LOG.error("Could not resolve category path for " + locationHint, e);
                         }
-                    }catch (PortalException e){
+                    } catch (PortalException e) {
                         LOG.error("Could not resolve vocabulary name for " + locationHint, e);
                     }
 
-                }catch(Exception e){
-                    LOG.error("Could not resolve site name for " +locationHint , e);
+                } catch (Exception e) {
+                    LOG.error("Could not resolve site name for " + locationHint, e);
                 }
-            }else{
-                LOG.error("Categories to be susbstited is not in correct format : SiteName::Vocabulary::CategoriesPath");
+            } else {
+                LOG.error(
+                        "Categories to be susbstited is not in correct format : SiteName::Vocabulary::CategoriesPath");
             }
 
         }
@@ -440,7 +439,7 @@ public final class ResolverUtil {
     }
 
     public static String lookupSiteIdWithName(final String locationHint, final String value,
-                                              final long company) {
+            final long company) {
         String valueCopy = value;
         String retVal = valueCopy;
         while (valueCopy != null && valueCopy.trim().indexOf(ID_OF_SITE_WITH_NAME_KEY) > -1) {
@@ -469,7 +468,7 @@ public final class ResolverUtil {
     }
 
     public static String lookupOrgOrUserGroupIdWithName(final String locationHint,
-                                                        final String value, final long company, final boolean uuid, final boolean org) {
+            final String value, final long company, final boolean uuid, final boolean org) {
         String valueCopy = value;
         String retVal = valueCopy;
         String searchString = ID_OF_ORG_USER_GROUP_WITH_NAME_KEY;
@@ -535,7 +534,7 @@ public final class ResolverUtil {
     }
 
     public static String lookupArticleWithArticleId(final String content, final String locationHint,
-                                                    final long groupId, final long company, final int typeOfId) {
+            final long groupId, final long company, final int typeOfId) {
         String contentCopy = content;
         String retVal = contentCopy;
         long siteGroupId = groupId;
@@ -598,8 +597,8 @@ public final class ResolverUtil {
     }
 
     public static String lookupPageIdWithFriendlyUrl(final String content,
-                                                     final String locationHint, final long groupId, final long company,
-                                                     final boolean isPrivate, final IdMode mode) {
+            final String locationHint, final long groupId, final long company,
+            final boolean isPrivate, final IdMode mode) {
         String contentCopy = content;
         String lookUp = PAGE_ID_BY_FRIENDLY_URL;
         if (isPrivate) {
@@ -673,7 +672,7 @@ public final class ResolverUtil {
     }
 
     public static String lookupDDLRecordSetId(final String content, final String locationHint,
-                                              final long groupId, final long company) {
+            final long groupId, final long company) {
         String contentCopy = content;
         String lookUp = DDL_REC_SET_BY_KEY;
 
@@ -726,8 +725,8 @@ public final class ResolverUtil {
 
     // CHECKSTYLE:OFF
     public static String lookupStructureOrTemplateIdWithKey(final String content,
-                                                            final String locationHint, final long groupId, final long company, final boolean uuid,
-                                                            final String commandPrefix, final boolean isTemplate, final Class referredClass) {
+            final String locationHint, final long groupId, final long company, final boolean uuid,
+            final String commandPrefix, final boolean isTemplate, final Class referredClass) {
         String contentCopy = content;
         String retVal = contentCopy;
         long siteGroupId = groupId;
@@ -803,7 +802,7 @@ public final class ResolverUtil {
     }
 
     public static long getStructureId(final String structureKey, final long groupId,
-                                      final Class clazz, boolean includeAncestorStructures) throws SystemException, PortalException {
+            final Class clazz, boolean includeAncestorStructures) throws SystemException, PortalException {
 
         long classNameId = ClassNameLocalServiceUtil.getClassNameId(clazz);
         DDMStructure structure = DDMStructureLocalServiceUtil.getStructure(groupId, classNameId,
@@ -812,7 +811,7 @@ public final class ResolverUtil {
     }
 
     public static String getStructureUUID(final String structureKey, final long groupId,
-                                          final Class clazz) throws SystemException, PortalException {
+            final Class clazz) throws SystemException, PortalException {
 
         long classNameId = ClassNameLocalServiceUtil.getClassNameId(clazz);
         DDMStructure structure = DDMStructureLocalServiceUtil.getStructure(groupId, classNameId,
@@ -821,7 +820,7 @@ public final class ResolverUtil {
     }
 
     public static long getTemplateId(final String templateKey, final long groupId,
-                                     final Class clazz) throws SystemException, PortalException {
+            final Class clazz) throws SystemException, PortalException {
 
         long classNameId = ClassNameLocalServiceUtil.getClassNameId(clazz);
 
@@ -831,7 +830,7 @@ public final class ResolverUtil {
     }
 
     public static Organization getOrganization(final String name, final long companyId,
-                                               final String locationHint) {
+            final String locationHint) {
         Organization o = null;
         try {
             o = OrganizationLocalServiceUtil.getOrganization(companyId, name);
@@ -844,7 +843,7 @@ public final class ResolverUtil {
     }
 
     public static UserGroup getUserGroup(final String name, final long companyId,
-                                         final String locationHint) {
+            final String locationHint) {
         UserGroup o = null;
         try {
             o = UserGroupLocalServiceUtil.getUserGroup(companyId, name);

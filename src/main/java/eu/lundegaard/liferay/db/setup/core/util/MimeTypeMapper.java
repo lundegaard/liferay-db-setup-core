@@ -1,31 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core.util;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
+package eu.lundegaard.liferay.db.setup.core.util;
 
 import java.util.HashMap;
 
@@ -34,6 +30,7 @@ import java.util.HashMap;
  * extensions. The tool is used as singleton.
  */
 public final class MimeTypeMapper {
+
     /**
      * The mapping between the mime type and the extension.
      */
@@ -75,12 +72,11 @@ public final class MimeTypeMapper {
     }
 
     /**
-     * Returns the file extension for a given mime type. If no mime type exists,
-     * the empty string is returned.
+     * Returns the file extension for a given mime type. If no mime type exists, the
+     * empty string is returned.
      *
-     * @param mimeType
-     *            The mime type string for which the file extension should be
-     *            retrieved.
+     * @param mimeType The mime type string for which the file extension should be
+     *        retrieved.
      * @return Returns the file extension string of the file type.
      */
     public String getExtension(final String mimeType) {
@@ -94,8 +90,7 @@ public final class MimeTypeMapper {
     /**
      * Returns the mime type for a given file extension.
      *
-     * @param extension
-     *            The extension for which the mime type should be retrieved.
+     * @param extension The extension for which the mime type should be retrieved.
      * @return Returns the mime type of a given extension.
      */
     public String getMimeType(final String extension) {
@@ -115,13 +110,10 @@ public final class MimeTypeMapper {
     }
 
     /**
-     * Initializes a mapping between the given mime type and the given
-     * extension.
+     * Initializes a mapping between the given mime type and the given extension.
      *
-     * @param mime
-     *            The mime type string.
-     * @param extension
-     *            The file extension string.
+     * @param mime The mime type string.
+     * @param extension The file extension string.
      */
     private void addEntry(final String extension, final String mime) {
         mimeToExtension.put(mime, extension);

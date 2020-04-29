@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.portal.kernel.dao.orm.ObjectNotFoundException;
 import com.liferay.portal.kernel.exception.NoSuchRoleException;
@@ -43,10 +40,10 @@ import eu.lundegaard.liferay.db.setup.core.util.ResolverUtil;
 import eu.lundegaard.liferay.db.setup.domain.DefinePermission;
 import eu.lundegaard.liferay.db.setup.domain.DefinePermissions;
 import eu.lundegaard.liferay.db.setup.domain.PermissionAction;
-
 import java.util.*;
 
 public final class SetupRoles {
+
     private static final Log LOG = LogFactoryUtil.getLog(SetupRoles.class);
     private static final long COMPANY_ID = PortalUtil.getDefaultCompanyId();
 
@@ -59,7 +56,8 @@ public final class SetupRoles {
 
     }
 
-    public static void setupRoles(final List<eu.lundegaard.liferay.db.setup.domain.Role> roles, long runAsUserId, long groupId, long company) {
+    public static void setupRoles(final List<eu.lundegaard.liferay.db.setup.domain.Role> roles, long runAsUserId,
+            long groupId, long company) {
 
         for (eu.lundegaard.liferay.db.setup.domain.Role role : roles) {
             try {
@@ -103,7 +101,7 @@ public final class SetupRoles {
     }
 
     public static void deleteRoles(final List<eu.lundegaard.liferay.db.setup.domain.Role> roles,
-                                   final String deleteMethod) {
+            final String deleteMethod) {
 
         switch (deleteMethod) {
             case "excludeListed":
@@ -151,7 +149,8 @@ public final class SetupRoles {
 
     }
 
-    private static void addRolePermissions(eu.lundegaard.liferay.db.setup.domain.Role role, long runAsUserId, long groupId, long companyId) {
+    private static void addRolePermissions(eu.lundegaard.liferay.db.setup.domain.Role role, long runAsUserId,
+            long groupId, long companyId) {
         if (role.getDefinePermissions() != null) {
             String siteName = role.getSite();
             if (siteName != null && !siteName.equals("")) {
@@ -161,13 +160,14 @@ public final class SetupRoles {
             }
             DefinePermissions permissions = role.getDefinePermissions();
             if (permissions.getDefinePermission() != null && permissions.getDefinePermission().size() > 0) {
-                for (DefinePermission permission : permissions.getDefinePermission() ) {
+                for (DefinePermission permission : permissions.getDefinePermission()) {
                     String permissionName = permission.getDefinePermissionName();
                     String resourcePrimKey = "0";
 
                     if (permission.getElementPrimaryKey() != null) {
                         resourcePrimKey = ResolverUtil
-                                .lookupAll(runAsUserId, groupId, companyId, permission.getElementPrimaryKey(), "Role " + role.getName() + " permission name " + permissionName);
+                                .lookupAll(runAsUserId, groupId, companyId, permission.getElementPrimaryKey(),
+                                        "Role " + role.getName() + " permission name " + permissionName);
                     }
                     String type = role.getType();
                     int scope = ResourceConstants.SCOPE_COMPANY;
@@ -214,11 +214,15 @@ public final class SetupRoles {
                         try {
                             SetupPermissions.addPermission(role.getName(), permissionName, resourcePrimKey, scope, loa);
                         } catch (SystemException e) {
-                            LOG.error("Error when defining permission " + permissionName + " for role " + role.getName(), e);
+                            LOG.error(
+                                    "Error when defining permission " + permissionName + " for role " + role.getName(),
+                                    e);
                         } catch (PortalException e) {
-                            LOG.error("Error when defining permission " + permissionName + " for role " + role.getName(), e);
+                            LOG.error(
+                                    "Error when defining permission " + permissionName + " for role " + role.getName(),
+                                    e);
                         }
-                    } else  {
+                    } else {
 
                     }
                 }

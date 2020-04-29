@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core.util;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -35,7 +32,6 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import eu.lundegaard.liferay.db.setup.domain.DescriptionTranslation;
 import eu.lundegaard.liferay.db.setup.domain.TitleTranslation;
-
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -44,40 +40,40 @@ import java.io.StringWriter;
 import java.util.*;
 
 public final class FieldMapUtil {
+
     private static final Log LOG = LogFactoryUtil.getLog(FieldMapUtil.class);
 
-    private FieldMapUtil() {
-    }
+    private FieldMapUtil() {}
 
     public static Map<Locale, String> getTitleMap(final List<TitleTranslation> translations,
-                                                  final long groupId, final String defaultLocaleTitle, final String locationHint) {
+            final long groupId, final String defaultLocaleTitle, final String locationHint) {
         Map<Locale, String> titleMap = new HashMap<>();
         Locale siteDefaultLocale = getDefaultLocale(groupId, locationHint);
 
         titleMap.put(siteDefaultLocale, defaultLocaleTitle);
         if (translations != null) {
             for (TitleTranslation tt : translations) {
-                fillFieldEntry(tt.getLocale(),tt.getTitleText(),titleMap,locationHint);
+                fillFieldEntry(tt.getLocale(), tt.getTitleText(), titleMap, locationHint);
             }
         }
         return titleMap;
     }
 
     public static Map<Locale, String> getDescriptionMap(final List<DescriptionTranslation> translations,
-            final long groupId, final String defaultLocaleTitle, final String locationHint){
+            final long groupId, final String defaultLocaleTitle, final String locationHint) {
         Map<Locale, String> descriptionMap = new HashMap<>();
         Locale siteDefaultLocale = getDefaultLocale(groupId, locationHint);
 
         descriptionMap.put(siteDefaultLocale, defaultLocaleTitle);
         if (translations != null) {
             for (DescriptionTranslation tt : translations) {
-                fillFieldEntry(tt.getLocale(),tt.getTitleText(),descriptionMap,locationHint);
+                fillFieldEntry(tt.getLocale(), tt.getTitleText(), descriptionMap, locationHint);
             }
         }
         return descriptionMap;
     }
 
-    private static void fillFieldEntry( String locale,String text,Map<Locale, String> fieldMap,String locationHint){
+    private static void fillFieldEntry(String locale, String text, Map<Locale, String> fieldMap, String locationHint) {
         try {
             String[] s = locale.split("_");
 
@@ -90,7 +86,7 @@ public final class FieldMapUtil {
             fieldMap.put(l, text);
         } catch (Exception ex) {
             LOG.error("Exception while retrieving locale " + locale + " for "
-                      + locationHint);
+                    + locationHint);
         }
     }
 
@@ -120,8 +116,8 @@ public final class FieldMapUtil {
             String langs = StringUtil.merge(locales, ",");
 
             /*
-             * TODO remove boolean first = true; for (Locale l : locales) {
-             * langs += ((!first) ? "," : "") + l.toString(); first = false; }
+             * TODO remove boolean first = true; for (Locale l : locales) { langs +=
+             * ((!first) ? "," : "") + l.toString(); first = false; }
              */
 
             writer.writeAttribute("default-locale", defaultLocale.toString());

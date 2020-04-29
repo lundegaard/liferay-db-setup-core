@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -44,7 +41,6 @@ import eu.lundegaard.liferay.db.setup.LiferaySetup;
 import eu.lundegaard.liferay.db.setup.core.util.CustomFieldSettingUtil;
 import eu.lundegaard.liferay.db.setup.domain.CustomFieldSetting;
 import eu.lundegaard.liferay.db.setup.domain.Site;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +58,7 @@ public final class SetupOrganizations {
     public static void setupOrganizations(
             final List<eu.lundegaard.liferay.db.setup.domain.Organization> organizations,
             final Organization parentOrg, final Group parentGroup) {
-            final long userId = LiferaySetup.getRunAsUserId();
+        final long userId = LiferaySetup.getRunAsUserId();
 
         for (eu.lundegaard.liferay.db.setup.domain.Organization organization : organizations) {
             try {
@@ -89,8 +85,8 @@ public final class SetupOrganizations {
                     long defaultUserId = UserLocalServiceUtil.getDefaultUserId(COMPANY_ID);
                     Organization newOrganization = OrganizationLocalServiceUtil.addOrganization(
                             defaultUserId, OrganizationConstants.DEFAULT_PARENT_ORGANIZATION_ID, organization.getName(),
-                            "organization", 0, 0,ListTypeConstants.ORGANIZATION_STATUS_DEFAULT,
-                            LiferaySetup.DESCRIPTION,false, new ServiceContext());
+                            "organization", 0, 0, ListTypeConstants.ORGANIZATION_STATUS_DEFAULT,
+                            LiferaySetup.DESCRIPTION, false, new ServiceContext());
                     addOrganizationUser(newOrganization, UserLocalServiceUtil.getUser(defaultUserId));
                     liferayOrg = newOrganization;
                     liferayGroup = liferayOrg.getGroup();
@@ -179,20 +175,20 @@ public final class SetupOrganizations {
     }
 
     private static void setCustomFields(final long runAsUserId, final long groupId,
-                                        final long company, final eu.lundegaard.liferay.db.setup.domain.Organization org,
-                                        final Organization liferayOrg) {
+            final long company, final eu.lundegaard.liferay.db.setup.domain.Organization org,
+            final Organization liferayOrg) {
 
-            Class clazz = Organization.class;
-            String resolverHint = "Resolving customized value for page " + org.getName() + " "
-                    + "failed for key %%key%% " + "and value %%value%%";
-            for (CustomFieldSetting cfs : org.getCustomFieldSetting()) {
-                String key = cfs.getKey();
-                String value = cfs.getValue();
-                CustomFieldSettingUtil.setExpandoValue(
-                        resolverHint.replace("%%key%%", key).replace("%%value%%", value),
-                        runAsUserId, groupId, company, clazz, liferayOrg.getOrganizationId(), key,
-                        value);
-            }
+        Class clazz = Organization.class;
+        String resolverHint = "Resolving customized value for page " + org.getName() + " "
+                + "failed for key %%key%% " + "and value %%value%%";
+        for (CustomFieldSetting cfs : org.getCustomFieldSetting()) {
+            String key = cfs.getKey();
+            String value = cfs.getValue();
+            CustomFieldSettingUtil.setExpandoValue(
+                    resolverHint.replace("%%key%%", key).replace("%%value%%", value),
+                    runAsUserId, groupId, company, clazz, liferayOrg.getOrganizationId(), key,
+                    value);
+        }
     }
 
     public static void deleteOrganization(
@@ -201,8 +197,9 @@ public final class SetupOrganizations {
 
         switch (deleteMethod) {
             case "excludeListed":
-                Map<String, eu.lundegaard.liferay.db.setup.domain.Organization> toBeDeletedOrganisations = convertOrganisationListToHashMap(
-                        organizations);
+                Map<String, eu.lundegaard.liferay.db.setup.domain.Organization> toBeDeletedOrganisations =
+                        convertOrganisationListToHashMap(
+                                organizations);
                 try {
                     for (Organization organisation : OrganizationLocalServiceUtil
                             .getOrganizations(-1, -1)) {
@@ -242,7 +239,8 @@ public final class SetupOrganizations {
     }
 
     public static void addOrganizationUser(Organization organization, User user) {
-        LOG.info("Adding user with screenName: " + user.getScreenName() + "to organization with name: " + organization.getName());
+        LOG.info("Adding user with screenName: " + user.getScreenName() + "to organization with name: "
+                + organization.getName());
         OrganizationLocalServiceUtil.addUserOrganization(user.getUserId(), organization);
     }
 

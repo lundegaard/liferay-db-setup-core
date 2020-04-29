@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -69,7 +66,8 @@ public class SetupUserGroups {
             }
             if (liferayUserGroupId == -1) {
                 try {
-                    liferayUserGroup = UserGroupLocalServiceUtil.addUserGroup(userId, COMPANY_ID, userGroup.getName(), userGroup.getDescription(),new ServiceContext());
+                    liferayUserGroup = UserGroupLocalServiceUtil.addUserGroup(userId, COMPANY_ID, userGroup.getName(),
+                            userGroup.getDescription(), new ServiceContext());
                 } catch (PortalException e) {
                     LOG.error("Can not create UserGroup with name: " + userGroup.getName(), e);
                     continue;
@@ -93,24 +91,28 @@ public class SetupUserGroups {
         }
     }
 
-    private static void addUsersToUserGroup(List<UserAsMember> usersAsMember, com.liferay.portal.kernel.model.UserGroup liferayUserGroup) {
+    private static void addUsersToUserGroup(List<UserAsMember> usersAsMember,
+            com.liferay.portal.kernel.model.UserGroup liferayUserGroup) {
 
         for (UserAsMember member : usersAsMember) {
             User user = UserLocalServiceUtil.fetchUserByScreenName(COMPANY_ID, member.getScreenName());
             if (Objects.isNull(user)) {
-                LOG.error("Can not set user " + member.getScreenName() + " as member of UserGroup. User does not exists...");
+                LOG.error("Can not set user " + member.getScreenName()
+                        + " as member of UserGroup. User does not exists...");
                 continue;
             }
 
             UserGroupLocalServiceUtil.addUserUserGroup(user.getUserId(), liferayUserGroup.getUserGroupId());
-            LOG.info("User " + user.getScreenName() + " successfully added as a member to UserGroup " + liferayUserGroup.getName());
+            LOG.info("User " + user.getScreenName() + " successfully added as a member to UserGroup "
+                    + liferayUserGroup.getName());
         }
 
     }
 
-    private static void setCustomFields(final long runAsUser, final com.liferay.portal.kernel.model.UserGroup liferayUserGroup,
-                                        final long company, final List<CustomFieldSetting> customFieldSettings,
-                                        final UserGroup userGroup) {
+    private static void setCustomFields(final long runAsUser,
+            final com.liferay.portal.kernel.model.UserGroup liferayUserGroup,
+            final long company, final List<CustomFieldSetting> customFieldSettings,
+            final UserGroup userGroup) {
 
         if (liferayUserGroup == null) {
             return;
@@ -120,29 +122,30 @@ public class SetupUserGroups {
 
         for (CustomFieldSetting cfs : customFieldSettings) {
             String resolverHint = "Custom value for userGroup " + userGroup.getName() + ", "
-                + " Key " + cfs.getKey() + ", value " + cfs.getValue();
+                    + " Key " + cfs.getKey() + ", value " + cfs.getValue();
             CustomFieldSettingUtil.setExpandoValue(resolverHint, runAsUser, liferayUserGroup.getUserGroupId(),
-                company, clazz, liferayUserGroup.getUserGroupId(), cfs.getKey(), cfs.getValue());
+                    company, clazz, liferayUserGroup.getUserGroupId(), cfs.getKey(), cfs.getValue());
         }
     }
 
     private static void addRolesToUserGroup(final UserGroup userGroup,
-                                       final com.liferay.portal.kernel.model.UserGroup liferayUserGroup) {
+            final com.liferay.portal.kernel.model.UserGroup liferayUserGroup) {
         try {
             for (Role role : userGroup.getRole()) {
-                com.liferay.portal.kernel.model.Role liferayRole = RoleLocalServiceUtil.getRole(COMPANY_ID, role.getName());
+                com.liferay.portal.kernel.model.Role liferayRole =
+                        RoleLocalServiceUtil.getRole(COMPANY_ID, role.getName());
                 String roleType = role.getType();
                 switch (roleType) {
                     case "portal":
                         GroupLocalServiceUtil.addRoleGroup(liferayRole.getRoleId(), liferayUserGroup.getGroupId());
                         LOG.info("Adding role " + liferayRole.getDescriptiveName() + " to userGroup "
-                            + liferayUserGroup.getName());
+                                + liferayUserGroup.getName());
                         break;
 
                     case "site":
                     case "organization":
                         LOG.error("Adding site or organization roles to UserGroup is not supported. " +
-                            "Bind userGroups to Site Roles within the Site elemennt.");
+                                "Bind userGroups to Site Roles within the Site elemennt.");
                         break;
                     default:
                         LOG.error("unknown role type " + roleType);

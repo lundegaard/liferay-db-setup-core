@@ -1,29 +1,49 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package eu.lundegaard.liferay.db.setup.core;
+
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s. Permission is hereby granted, free of
+ * charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 import java.util.Calendar;
@@ -31,7 +51,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
@@ -41,7 +60,6 @@ import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.util.PortalUtil;
 import eu.lundegaard.liferay.db.setup.core.util.CustomFieldSettingUtil;
 import eu.lundegaard.liferay.db.setup.domain.CustomFieldSetting;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -76,14 +94,14 @@ public final class SetupUsers {
                 LOG.error("Error by retrieving user " + user.getEmailAddress());
             }
 
-            if( null != liferayUser ){
+            if (null != liferayUser) {
                 addUserToOrganizations(user, liferayUser);
                 addRolesToUser(user, liferayUser);
                 if (user.getCustomFieldSetting() != null && !user.getCustomFieldSetting().isEmpty()) {
                     setCustomFields(runAsUser, groupId, COMPANY_ID, liferayUser, user);
                 }
             } else {
-                LOG.warn("Could not create user with screenName '" + user.getScreenName()+"'");
+                LOG.warn("Could not create user with screenName '" + user.getScreenName() + "'");
             }
         }
     }
@@ -147,7 +165,7 @@ public final class SetupUsers {
     }
 
     private static void addUserToOrganizations(
-        final eu.lundegaard.liferay.db.setup.domain.User setupUser, final User liferayUser) {
+            final eu.lundegaard.liferay.db.setup.domain.User setupUser, final User liferayUser) {
 
         try {
             for (eu.lundegaard.liferay.db.setup.domain.Organization organization : setupUser
@@ -175,25 +193,25 @@ public final class SetupUsers {
                 long[] roleIds = {role.getRoleId()};
                 String roleType = userRole.getType();
                 switch (roleType) {
-                case "portal":
-                    RoleLocalServiceUtil.addUserRoles(liferayUser.getUserId(), roleIds);
-                    LOG.info("Adding regular role " + userRole.getName() + " to user "
-                            + liferayUser.getEmailAddress());
-                    break;
+                    case "portal":
+                        RoleLocalServiceUtil.addUserRoles(liferayUser.getUserId(), roleIds);
+                        LOG.info("Adding regular role " + userRole.getName() + " to user "
+                                + liferayUser.getEmailAddress());
+                        break;
 
-                case "site":
-                case "organization":
-                    Group group = GroupLocalServiceUtil.getGroup(COMPANY_ID, userRole.getSite());
-                    UserGroupRoleLocalServiceUtil.addUserGroupRoles(liferayUser.getUserId(),
-                            group.getGroupId(), roleIds);
+                    case "site":
+                    case "organization":
+                        Group group = GroupLocalServiceUtil.getGroup(COMPANY_ID, userRole.getSite());
+                        UserGroupRoleLocalServiceUtil.addUserGroupRoles(liferayUser.getUserId(),
+                                group.getGroupId(), roleIds);
 
-                    LOG.info("Adding " + roleType + " role " + userRole.getName() + " to user "
-                            + liferayUser.getEmailAddress());
-                    break;
+                        LOG.info("Adding " + roleType + " role " + userRole.getName() + " to user "
+                                + liferayUser.getEmailAddress());
+                        break;
 
-                default:
-                    LOG.error("unknown role type " + roleType);
-                    break;
+                    default:
+                        LOG.error("unknown role type " + roleType);
+                        break;
                 }
             }
         } catch (PortalException | SystemException e) {
@@ -203,56 +221,56 @@ public final class SetupUsers {
 
     /**
      * by this method, all users will be deleted from liferay, excluding those
-     * listed in the setup.xml. from security reasons, no administrators, or
-     * default users are deleted
+     * listed in the setup.xml. from security reasons, no administrators, or default
+     * users are deleted
      */
     public static void deleteUsers(final List<eu.lundegaard.liferay.db.setup.domain.User> users,
             final String deleteMethod) {
 
         switch (deleteMethod) {
-        case "excludeListed":
+            case "excludeListed":
 
-            Map<String, eu.lundegaard.liferay.db.setup.domain.User> usersMap = convertUserListToHashMap(
-                    users);
-            try {
-                List<User> allUsers = UserLocalServiceUtil.getUsers(-1, -1);
-                for (User user : allUsers) {
-                    if (!usersMap.containsKey(user.getEmailAddress())) {
-                        if (user.isDefaultUser() || PortalUtil.isOmniadmin(user.getUserId())) {
-                            LOG.info("Skipping deletion of system user " + user.getEmailAddress());
-                        } else {
-                            try {
-                                UserLocalServiceUtil.deleteUser(user.getUserId());
-                            } catch (PortalException | SystemException e) {
-                                LOG.error("Unable to delete user.", e);
+                Map<String, eu.lundegaard.liferay.db.setup.domain.User> usersMap = convertUserListToHashMap(
+                        users);
+                try {
+                    List<User> allUsers = UserLocalServiceUtil.getUsers(-1, -1);
+                    for (User user : allUsers) {
+                        if (!usersMap.containsKey(user.getEmailAddress())) {
+                            if (user.isDefaultUser() || PortalUtil.isOmniadmin(user.getUserId())) {
+                                LOG.info("Skipping deletion of system user " + user.getEmailAddress());
+                            } else {
+                                try {
+                                    UserLocalServiceUtil.deleteUser(user.getUserId());
+                                } catch (PortalException | SystemException e) {
+                                    LOG.error("Unable to delete user.", e);
+                                }
+                                LOG.info("Deleting User " + user.getEmailAddress());
                             }
-                            LOG.info("Deleting User " + user.getEmailAddress());
                         }
                     }
+
+                } catch (SystemException e) {
+                    LOG.error("Unable to get user", e);
                 }
+                break;
 
-            } catch (SystemException e) {
-                LOG.error("Unable to get user", e);
-            }
-            break;
+            case "onlyListed":
+                for (eu.lundegaard.liferay.db.setup.domain.User user : users) {
+                    try {
+                        String email = user.getEmailAddress();
+                        User u = UserLocalServiceUtil.getUserByEmailAddress(COMPANY_ID, email);
+                        UserLocalServiceUtil.deleteUser(u);
 
-        case "onlyListed":
-            for (eu.lundegaard.liferay.db.setup.domain.User user : users) {
-                try {
-                    String email = user.getEmailAddress();
-                    User u = UserLocalServiceUtil.getUserByEmailAddress(COMPANY_ID, email);
-                    UserLocalServiceUtil.deleteUser(u);
-
-                    LOG.info("Deleting User " + email);
-                } catch (PortalException | SystemException e) {
-                    LOG.error("Unable to delete user.", e);
+                        LOG.info("Deleting User " + email);
+                    } catch (PortalException | SystemException e) {
+                        LOG.error("Unable to delete user.", e);
+                    }
                 }
-            }
-            break;
+                break;
 
-        default:
-            LOG.error("Unknown delete method : " + deleteMethod);
-            break;
+            default:
+                LOG.error("Unknown delete method : " + deleteMethod);
+                break;
         }
     }
 

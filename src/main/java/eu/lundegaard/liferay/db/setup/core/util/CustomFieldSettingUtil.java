@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core.util;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core.util;
 
 import com.liferay.expando.kernel.model.ExpandoColumn;
 import com.liferay.expando.kernel.model.ExpandoTable;
@@ -42,6 +39,7 @@ import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
  * @author msi
  */
 public final class CustomFieldSettingUtil {
+
     private static final Log LOG = LogFactoryUtil.getLog(CustomFieldSettingUtil.class);
 
     private CustomFieldSettingUtil() {
@@ -49,13 +47,11 @@ public final class CustomFieldSettingUtil {
     }
 
     /**
-     * Auxiliary method that returns the expando value of a given expando field
-     * with a given key.
+     * Auxiliary method that returns the expando value of a given expando field with
+     * a given key.
      *
-     * @param user
-     *            The user whose expando field will be retrieved.
-     * @param key
-     *            The name of the expando field.
+     * @param user The user whose expando field will be retrieved.
+     * @param key The name of the expando field.
      * @return Returns false, if the expando field or the value is not defined.
      */
     // CHECKSTYLE:OFF

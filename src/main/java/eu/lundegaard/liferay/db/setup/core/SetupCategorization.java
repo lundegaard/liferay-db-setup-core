@@ -1,27 +1,25 @@
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package eu.lundegaard.liferay.db.setup.core;
 
@@ -63,6 +61,7 @@ import java.util.Objects;
  * Created by guno on 8. 6. 2015.
  */
 public final class SetupCategorization {
+
     private static final Log LOG = LogFactoryUtil.getLog(SetupArticles.class);
 
     private SetupCategorization() {
@@ -82,7 +81,8 @@ public final class SetupCategorization {
         }
     }
 
-    private static void setupVocabulary(final Vocabulary vocabulary, final Site site, final long groupId, final Locale defaultLocale) {
+    private static void setupVocabulary(final Vocabulary vocabulary, final Site site, final long groupId,
+            final Locale defaultLocale) {
 
         LOG.info("Setting up vocabulary with name: " + vocabulary.getName());
 
@@ -127,7 +127,8 @@ public final class SetupCategorization {
             serviceContext.setCompanyId(PortalUtil.getDefaultCompanyId());
             serviceContext.setScopeGroupId(groupId);
             assetVocabulary = AssetVocabularyLocalServiceUtil.addVocabulary(
-                    LiferaySetup.getRunAsUserId(), groupId, null, titleMap, descMap, composeVocabularySettings(vocabulary, groupId), serviceContext);
+                    LiferaySetup.getRunAsUserId(), groupId, null, titleMap, descMap,
+                    composeVocabularySettings(vocabulary, groupId), serviceContext);
             LOG.info("AssetVocabulary successfuly added. ID:" + assetVocabulary.getVocabularyId()
                     + ", group:" + assetVocabulary.getGroupId());
             setupCategories(assetVocabulary.getVocabularyId(), groupId, 0L,
@@ -144,8 +145,9 @@ public final class SetupCategorization {
         List<AssociatedAssetType> types = vocabulary.getAssociatedAssetType();
 
         if (Objects.isNull(types) || types.isEmpty()) {
-            assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(new long[] {AssetCategoryConstants.ALL_CLASS_NAME_ID},
-                new long[] {AssetCategoryConstants.ALL_CLASS_TYPE_PK}, new boolean[] {false});
+            assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(
+                    new long[] {AssetCategoryConstants.ALL_CLASS_NAME_ID},
+                    new long[] {AssetCategoryConstants.ALL_CLASS_TYPE_PK}, new boolean[] {false});
             return assetVocabularySettingsHelper.toString();
         }
 
@@ -160,9 +162,10 @@ public final class SetupCategorization {
             }
 
             long subtypePK = -1;
-            if ( Objects.nonNull(type.getSubtypeStructureKey()) && !type.getSubtypeStructureKey().isEmpty()) { // has subtype
+            if (Objects.nonNull(type.getSubtypeStructureKey()) && !type.getSubtypeStructureKey().isEmpty()) { // has subtype
                 try {
-                    subtypePK = ResolverUtil.getStructureId(type.getSubtypeStructureKey(), groupId, Class.forName(type.getClassName()), true);
+                    subtypePK = ResolverUtil.getStructureId(type.getSubtypeStructureKey(), groupId,
+                            Class.forName(type.getClassName()), true);
                 } catch (ClassNotFoundException | PortalException e) {
                     LOG.error("Class can not be be resolved for classname: " + type.getClassName(), e);
                     continue;
@@ -176,8 +179,9 @@ public final class SetupCategorization {
 
         // no valid associated types case
         if (classNameIds.isEmpty()) {
-            assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(new long[] {AssetCategoryConstants.ALL_CLASS_NAME_ID},
-                new long[] {AssetCategoryConstants.ALL_CLASS_TYPE_PK}, new boolean[] {false});
+            assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(
+                    new long[] {AssetCategoryConstants.ALL_CLASS_NAME_ID},
+                    new long[] {AssetCategoryConstants.ALL_CLASS_TYPE_PK}, new boolean[] {false});
             return assetVocabularySettingsHelper.toString();
         }
 
@@ -188,16 +192,18 @@ public final class SetupCategorization {
             requiredsArray[i] = requireds.get(i);
         }
 
-        assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(ArrayUtil.toLongArray(classNameIds), ArrayUtil.toLongArray(classTypePKs), requiredsArray);
+        assetVocabularySettingsHelper.setClassNameIdsAndClassTypePKs(ArrayUtil.toLongArray(classNameIds),
+                ArrayUtil.toLongArray(classTypePKs), requiredsArray);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Vocabulary settings composed for vocabulary:" + vocabulary.getName() + ". Content: " + assetVocabularySettingsHelper.toString());
+            LOG.debug("Vocabulary settings composed for vocabulary:" + vocabulary.getName() + ". Content: "
+                    + assetVocabularySettingsHelper.toString());
         }
 
         return assetVocabularySettingsHelper.toString();
     }
 
     private static void setupCategories(final long vocabularyId, final long groupId,
-                                        final long parentId, final List<Category> categories, final Locale defaultLocale) {
+            final long parentId, final List<Category> categories, final Locale defaultLocale) {
         LOG.info("Setting up categories for parentId:" + parentId);
 
         if (categories != null && !categories.isEmpty()) {
@@ -208,12 +214,13 @@ public final class SetupCategorization {
     }
 
     private static void setupCategory(final Category category, final long vocabularyId,
-                                      final long groupId, final Locale defaultLocale, final long parentCategoryId) {
+            final long groupId, final Locale defaultLocale, final long parentCategoryId) {
 
         LOG.info("Setting up category with name:" + category.getName());
 
-        Map<Locale, String> titleMap = FieldMapUtil.getTitleMap(category.getTitleTranslation(), groupId, category.getName(),
-            "Category with name: " + category.getName());
+        Map<Locale, String> titleMap =
+                FieldMapUtil.getTitleMap(category.getTitleTranslation(), groupId, category.getName(),
+                        "Category with name: " + category.getName());
         Map<Locale, String> descMap = new HashMap<>();
         String description = category.getDescription();
         descMap.put(defaultLocale, description);

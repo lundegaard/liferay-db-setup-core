@@ -1,30 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core.util;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+package eu.lundegaard.liferay.db.setup.core.util;
 
 import com.liferay.asset.kernel.exception.NoSuchTagException;
 import com.liferay.asset.kernel.model.AssetEntry;
@@ -42,16 +39,16 @@ import eu.lundegaard.liferay.db.setup.LiferaySetup;
 import eu.lundegaard.liferay.db.setup.domain.Article;
 import eu.lundegaard.liferay.db.setup.domain.Category;
 import eu.lundegaard.liferay.db.setup.domain.Tag;
-
 import java.util.List;
 
 public final class TaggingUtil {
+
     private static final Log LOG = LogFactoryUtil.getLog(TaggingUtil.class);
 
-    private TaggingUtil() {
-    }
+    private TaggingUtil() {}
 
-    public static void associateTagsAndCategories(long groupId, Article article, JournalArticle journalArticle) throws PortalException {
+    public static void associateTagsAndCategories(long groupId, Article article, JournalArticle journalArticle)
+            throws PortalException {
 
         List<Tag> tags = article.getTag();
         String[] tagNames = null;
@@ -59,33 +56,35 @@ public final class TaggingUtil {
             tagNames = tags.stream().map(Tag::getName).toArray(String[]::new);
         }
 
-        long[] categoryIds=article.getCategory().stream().map(category -> ResolverUtil.lookupAll(LiferaySetup.getRunAsUserId(), groupId, journalArticle.getCompanyId(),
-                                                                              category.getId(), article.getPath())).filter(categoryString-> Validator.isNumber(categoryString))
-                                                                                .mapToLong(categoryString->Long.parseLong(categoryString)).toArray();
+        long[] categoryIds = article.getCategory().stream()
+                .map(category -> ResolverUtil.lookupAll(LiferaySetup.getRunAsUserId(), groupId,
+                        journalArticle.getCompanyId(),
+                        category.getId(), article.getPath()))
+                .filter(categoryString -> Validator.isNumber(categoryString))
+                .mapToLong(categoryString -> Long.parseLong(categoryString)).toArray();
 
 
-        AssetEntry entry = AssetEntryLocalServiceUtil.getEntry(JournalArticle.class.getName(), journalArticle.getResourcePrimKey());
-        AssetEntryLocalServiceUtil.updateEntry(LiferaySetup.getRunAsUserId(), groupId, JournalArticle.class.getName(), entry.getClassPK(), categoryIds, tagNames);
+        AssetEntry entry = AssetEntryLocalServiceUtil.getEntry(JournalArticle.class.getName(),
+                journalArticle.getResourcePrimKey());
+        AssetEntryLocalServiceUtil.updateEntry(LiferaySetup.getRunAsUserId(), groupId, JournalArticle.class.getName(),
+                entry.getClassPK(), categoryIds, tagNames);
     }
 
     /*
-    public static void associateCategories(long groupId, Article article, JournalArticle journalArticle) {
-
-        List<CategoryRef> categories = article.getCategoryRef();
-        String[] categoryTitles = null;
-        if (categories != null) {
-            categoryTitles = categories.stream().map(CategoryRef -> {
-                AssetCategoryLocalServiceUtil.get
-            });
-        }
-        AssetCategoryLocalServiceUtil.
-
-    }
-    */
+     * public static void associateCategories(long groupId, Article article,
+     * JournalArticle journalArticle) {
+     *
+     * List<CategoryRef> categories = article.getCategoryRef(); String[]
+     * categoryTitles = null; if (categories != null) { categoryTitles =
+     * categories.stream().map(CategoryRef -> { AssetCategoryLocalServiceUtil.get
+     * }); } AssetCategoryLocalServiceUtil.
+     *
+     * }
+     */
 
     public static void associateTagsWithJournalArticle(final List<String> tags,
-                                                       final List<String> categories, final long userId, final long groupId,
-                                                       final long primaryKey) {
+            final List<String> categories, final long userId, final long groupId,
+            final long primaryKey) {
 
         try {
             long[] catIds = new long[0];
@@ -100,7 +99,7 @@ public final class TaggingUtil {
     }
 
     public static long[] getCategories(final List<String> categories, final long groupId,
-                                       final long runAsUser) {
+            final long runAsUser) {
         // The categories and tags to assign
         final long[] assetCategoryIds = new long[categories.size()];
 

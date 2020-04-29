@@ -1,31 +1,27 @@
-package eu.lundegaard.liferay.db.setup.core;
-
 /*
- * #%L
- * Liferay Portal DB Setup core
- * %%
- * Copyright (C) 2016 - 2020 Lundegaard a.s.
- * %%
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Lundegaard a.s.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * #L%
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-
+package eu.lundegaard.liferay.db.setup.core;
 
 import com.liferay.expando.kernel.model.*;
 import com.liferay.expando.kernel.service.ExpandoColumnLocalServiceUtil;
@@ -38,7 +34,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.*;
 import eu.lundegaard.liferay.db.setup.domain.CustomFields;
 import eu.lundegaard.liferay.db.setup.domain.RolePermission;
-
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.*;
@@ -129,22 +124,22 @@ public final class SetupCustomFields {
             String permission = rolePermission.getPermission();
             try {
                 switch (permission) {
-                case "update":
-                    SetupPermissions.addReadWrightRight(roleName, ExpandoColumn.class.getName(),
-                            String.valueOf(column.getColumnId()));
-                    LOG.info("Added update permission on field " + fieldName + " for role "
-                            + roleName);
-                    break;
-                case "view":
-                    SetupPermissions.addReadRight(roleName, ExpandoColumn.class.getName(),
-                            String.valueOf(column.getColumnId()));
-                    LOG.info("Added read permission on field " + fieldName + " for role "
-                            + roleName);
-                    break;
-                default:
-                    LOG.info("Unknown permission:" + permission + ". No permission added on "
-                            + "field " + fieldName + " for role " + roleName);
-                    break;
+                    case "update":
+                        SetupPermissions.addReadWrightRight(roleName, ExpandoColumn.class.getName(),
+                                String.valueOf(column.getColumnId()));
+                        LOG.info("Added update permission on field " + fieldName + " for role "
+                                + roleName);
+                        break;
+                    case "view":
+                        SetupPermissions.addReadRight(roleName, ExpandoColumn.class.getName(),
+                                String.valueOf(column.getColumnId()));
+                        LOG.info("Added read permission on field " + fieldName + " for role "
+                                + roleName);
+                        break;
+                    default:
+                        LOG.info("Unknown permission:" + permission + ". No permission added on "
+                                + "field " + fieldName + " for role " + roleName);
+                        break;
                 }
 
             } catch (PortalException e) {
