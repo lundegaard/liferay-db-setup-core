@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>eu.lundegaard.commons.java</groupId>
+        <artifactId>parent-pom</artifactId>
+        <version>3.3.0</version>
+    </parent>
+
     <groupId>eu.lundegaard.liferay</groupId>
     <artifactId>liferay-db-setup-core</artifactId>
     <version>3.0.0-SNAPSHOT</version>
@@ -44,6 +50,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.impl</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.liferay</groupId>
             <artifactId>com.liferay.journal.api</artifactId>
         </dependency>
@@ -64,26 +74,10 @@
             <artifactId>portlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- Test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>com.liferay.portal.impl</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -107,84 +101,44 @@
 
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.8</version>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/generated-sources/license</outputDirectory>
-                    <thirdPartyFilename>THIRD-PARTY.txt</thirdPartyFilename>
-                    <licenseName>mit</licenseName>
-                    <excludes>
-                        <exclude>**/package-info.java</exclude>
-                    </excludes>
-                    <canUpdateCopyright>true</canUpdateCopyright>
-                    <canUpdateDescription>true</canUpdateDescription>
-                    <canUpdateLicense>true</canUpdateLicense>
-                </configuration>
+                <version>3.0</version>
                 <executions>
                     <execution>
-                        <id>first</id>
+                        <id>ensure-license-headers</id>
                         <goals>
-                            <goal>update-file-header</goal>
+                            <goal>format</goal>
                         </goals>
                         <phase>process-sources</phase>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
+                    <header>license.txt</header>
+                    <failIfMissing>false</failIfMissing>
+                    <strictCheck>true</strictCheck>
                     <encoding>UTF-8</encoding>
+                    <includes>
+                        <include>src/main/java/**</include>
+                        <include>src/test/java/**</include>
+                    </includes>
+                    <properties>
+                        <year>${license.plugin.year}</year>
+                    </properties>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                        <jspf>DYNASCRIPT_STYLE</jspf>
+                    </mapping>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <charset>UTF-8</charset>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M2</version>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <failFast>true</failFast>
-                            <rules>
-                                <requireJavaVersion>
-                                    <version>[1.8.0,1.9.0)</version>
-                                </requireJavaVersion>
-                                <requireMavenVersion>
-                                    <version>[3.5.0,4.0.0)</version>
-                                </requireMavenVersion>
-                                <requireReleaseDeps/>
-                                <requireUpperBoundDeps/>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
