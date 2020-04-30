@@ -44,7 +44,7 @@ XML file of an upgrade step has usually this structure:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<setup xmlns="http://www.mimacom.com/liferay/setup">
+<setup xmlns="http://www.lundegaard.eu/liferay/setup">
     <configuration>
         <runasuser>test@liferay.com</runasuser>
     </configuration>
@@ -59,7 +59,7 @@ For instance, this will create **Role** with Publisher as a name.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<setup xmlns="http://www.mimacom.com/liferay/setup">
+<setup xmlns="http://www.lundegaard.eu/liferay/setup">
     <configuration>
         <runasuser>test@liferay.com</runasuser>
     </configuration>
