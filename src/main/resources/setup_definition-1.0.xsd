@@ -151,7 +151,7 @@
             <xs:attribute name="strict-web-folder-definition" type="xs:boolean" default="false"/>
             <xs:attribute name="strict-document-folder-definition" type="xs:boolean" default="false"/>
             <xs:attribute name="maintain-site-hierarchy" type="xs:boolean" default="false"/>
-            <xs:attribute name="site-friendly-url" type="xs:string"/>
+            <xs:attribute name="site-friendly-url" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 
