@@ -76,7 +76,7 @@ public final class SetupPermissions {
     }
 
     /**
-     * @param portlet
+     * @param portlet -
      * @return mapping of role name to action ids for the portlet
      */
     private static Map<String, Set<String>> getActionsPerRole(PortletPermissions.Portlet portlet) {

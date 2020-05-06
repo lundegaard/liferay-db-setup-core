@@ -87,7 +87,7 @@ public final class DocumentUtil {
      * @param company the id of the company.
      * @param repoId the repository id.
      * @param userId the id of the user executing this operation.
-     * @return
+     * @return -
      */
     public static FileEntry findDocument(final String documentName, final long groupId,
             final long company, final long repoId, final long userId) {
