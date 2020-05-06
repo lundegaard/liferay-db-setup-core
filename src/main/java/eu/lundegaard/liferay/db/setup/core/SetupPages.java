@@ -96,15 +96,6 @@ public final class SetupPages {
 
     }
 
-    /**
-     * @param site
-     * @param groupId
-     * @param company
-     * @param userid
-     *
-     * @throws SystemException
-     * @throws PortalException
-     */
     public static void setupSitePages(final Site site, final long groupId,
             final long company, final long userid) throws SystemException, PortalException {
 
@@ -194,14 +185,6 @@ public final class SetupPages {
         }
     }
 
-    /**
-     * @param groupId
-     * @param theme
-     * @param isPrivate
-     *
-     * @throws SystemException
-     * @throws PortalException
-     */
     private static void setupTheme(final long groupId, final Theme theme, final boolean isPrivate)
             throws SystemException, PortalException {
 
@@ -216,17 +199,6 @@ public final class SetupPages {
         LayoutSetLocalServiceUtil.updateLayoutSet(set);
     }
 
-    /**
-     * @param pages
-     * @param groupId
-     * @param isPrivate
-     * @param parentLayoutId
-     * @param company
-     * @param userId
-     *
-     * @throws SystemException
-     * @throws PortalException
-     */
     private static void addPages(final List<Page> pages, String defaultLayout,
             String defaultLayoutContainedInThemeWithId,
             final long groupId, final boolean isPrivate, final long parentLayoutId, final long company,
@@ -517,8 +489,6 @@ public final class SetupPages {
      * @param company Id of the company.
      * @param groupId The group id.
      * @param runAsUserId The user id which import the data.
-     *
-     * @return
      */
     private static String resolvePortletPrefValue(final String key, final String value,
             final Pageportlet portlet, final long company, final long groupId,

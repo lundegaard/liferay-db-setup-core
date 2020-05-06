@@ -51,7 +51,7 @@ public final class MimeTypeMapper {
     /**
      * Returns the singleton instance of the mime type mapper.
      *
-     * @return
+     * @return -
      */
     public static MimeTypeMapper getInstance() {
 

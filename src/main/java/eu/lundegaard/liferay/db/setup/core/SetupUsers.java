@@ -223,6 +223,9 @@ public final class SetupUsers {
      * by this method, all users will be deleted from liferay, excluding those
      * listed in the setup.xml. from security reasons, no administrators, or default
      * users are deleted
+     * 
+     * @param users -
+     * @param deleteMethod -
      */
     public static void deleteUsers(final List<eu.lundegaard.liferay.db.setup.domain.User> users,
             final String deleteMethod) {
