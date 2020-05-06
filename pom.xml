@@ -2,26 +2,195 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.mimacom.liferay</groupId>
-  <artifactId>build-parent</artifactId>
-  <version>1.0.0</version>
-  <packaging>pom</packaging>
+    <parent>
+        <groupId>eu.lundegaard.commons.java</groupId>
+        <artifactId>parent-pom</artifactId>
+        <version>3.3.0</version>
+    </parent>
 
-  <modules>
-    <module>db-setup-core</module>
-  </modules>
+    <groupId>eu.lundegaard.liferay</groupId>
+    <artifactId>liferay-db-setup-core</artifactId>
+    <version>3.0.0</version>
+    <packaging>jar</packaging>
 
-  <distributionManagement>
-    <repository>
-      <id>mimacom-repo-id-deploy-open</id>
-      <url>${mimacom-deploy-path-releases-open}</url>
-    </repository>
-    <snapshotRepository>
-      <id>mimacom-repo-id-deploy-open</id>
-      <url>${mimacom-deploy-path-snapshots-open}</url>
-    </snapshotRepository>
-  </distributionManagement>
+    <name>Liferay Portal DB Setup core</name>
+    <description>
+        Library that allows to declare a set of Liferay data to be created and create them using the API.
+    </description>
+    <inceptionYear>2016</inceptionYear>
+
+    <properties>
+        <liferay.version>7.2.0</liferay.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.liferay.portal</groupId>
+                <artifactId>release.portal.bom</artifactId>
+                <version>${liferay.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.liferay.portal</groupId>
+                <artifactId>release.portal.bom.compile.only</artifactId>
+                <version>${liferay.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.kernel</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay.portal</groupId>
+            <artifactId>com.liferay.portal.impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.journal.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.dynamic.data.lists.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.dynamic.data.mapping.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.portlet.display.template.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.portlet</groupId>
+            <artifactId>portlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <excludePackageNames>eu.lundegaard.liferay.db.setup.domain</excludePackageNames>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/generated-sources/sources</outputDirectory>
+                    <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
+                    <packageName>eu.lundegaard.liferay.db.setup.domain</packageName>
+                    <clearOutputDir>false</clearOutputDir>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <executions>
+                    <execution>
+                        <id>ensure-license-headers</id>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <header>license.txt</header>
+                    <failIfMissing>false</failIfMissing>
+                    <strictCheck>true</strictCheck>
+                    <encoding>UTF-8</encoding>
+                    <includes>
+                        <include>src/main/java/**</include>
+                        <include>src/test/java/**</include>
+                    </includes>
+                    <properties>
+                        <year>${license.plugin.year}</year>
+                    </properties>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                        <jspf>DYNASCRIPT_STYLE</jspf>
+                    </mapping>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <organization>
+        <name>Lundegaard a.s.</name>
+        <url>https://www.lundegaard.eu</url>
+    </organization>
+
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://jira.lnd.bz</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://jenkins.lnd.bz</url>
+    </ciManagement>
+
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>roman.srom</id>
+            <name>Roman Šrom</name>
+            <email>roman.srom@lundegaard.eu</email>
+            <organization>Lundegaard a.s.</organization>
+            <organizationUrl>https://www.lundegaard.eu</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/lundegaard/liferay-db-setup-core.git</connection>
+        <developerConnection>scm:git:ssh://github.com:lundegaard/liferay-db-setup-core.git</developerConnection>
+        <url>https://github.com/lundegaard/liferay-db-setup-core</url>
+    </scm>
 
 </project>
