@@ -15,6 +15,7 @@
                 <xs:element ref="organizations" minOccurs="0"/>
                 <xs:element ref="customFields" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="deleteLiferayObjects" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="form" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element maxOccurs="1" minOccurs="0" ref="page-templates"/>
             </xs:sequence>
         </xs:complexType>
@@ -896,6 +897,50 @@
             <xs:attribute name="name" use="required" type="xs:string"/>
             <xs:attribute name="description" type="xs:string" default=""/>
             <xs:attribute name="id" type="xs:string" default=""/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="form">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="form-data" type="xs:string"/>
+                <xs:element name="form-layout" type="xs:string"/>
+                <xs:element name="form-settings" type="xs:string"/>
+                <xs:element name="form-description">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Description" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute type="xs:string" name="language-id"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="available-locales"/>
+                        <xs:attribute type="xs:string" name="default-locale"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="form-name">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Name" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute type="xs:string" name="language-id"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="available-locales"/>
+                        <xs:attribute type="xs:string" name="default-locale"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 

@@ -195,6 +195,11 @@ public final class LiferaySetup {
             SetupPages.setupPageTemplates(setup.getPageTemplates(), groupId, companyId, defaultUserId);
         }
 
+        if (!setup.getForm().isEmpty()) {
+            LOG.info("Setting up " + setup.getForm().size() + " forms");
+            SetupForms.setupForms(setup.getForm(), defaultUserId, groupId);
+        }
+
         LOG.info("Setup finished");
     }
 
