@@ -24,6 +24,7 @@
 package eu.lundegaard.liferay.db.setup.core.util;
 
 import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
+import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -121,7 +122,8 @@ public final class DocumentUtil {
             final String sourceFileName) {
         try {
             DLAppLocalServiceUtil.updateFileEntry(userId, fe.getFileEntryId(), sourceFileName,
-                    fe.getMimeType(), fe.getTitle(), fe.getDescription(), "update content", true,
+                    fe.getMimeType(), fe.getTitle(), fe.getDescription(), "update content",
+                    DLVersionNumberIncrease.MINOR,
                     content, new ServiceContext());
         } catch (Exception e) {
             LOG.error("Can not update Liferay Document entry with ID:" + fe.getFileEntryId(), e);
