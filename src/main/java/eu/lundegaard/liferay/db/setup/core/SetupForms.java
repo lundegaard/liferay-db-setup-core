@@ -50,32 +50,29 @@ public final class SetupForms {
     private SetupForms() {}
 
     public static void setupForms(List<Form> formList, long userId, long groupId) {
-        int count = 0;
         for (Form form : formList) {
-            count++;
             String defaultFormName = getDefaultFormName(form);
-            String structureKey = "IMPORTED_STRUCTURE_KEY_" + count;
-            String structureLayoutKey = "IMPORTED_STRUCTURE_LAYOUT_KEY_" + count;
             long structureClassNameId = ClassNameLocalServiceUtil.getClassNameId(DDMFormInstance.class);
 
             try {
-                DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, structureKey);
+                DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, form.getFormDbKey());
                 LOG.info("Setup: form " + defaultFormName + " already exists, skipping...");
             } catch (NoSuchStructureException e) {
                 LOG.info("Setup: creating form " + defaultFormName);
-                createForm(userId, groupId, form, structureKey, structureLayoutKey, structureClassNameId);
+                createForm(userId, groupId, form, structureClassNameId);
             } catch (PortalException e) {
                 LOG.error("Error during setup of form " + defaultFormName, e);
             }
         }
     }
 
-    private static void createForm(long userId, long groupId, Form form, String structureKey, String structureLayoutKey,
-            long structureClassNameId) {
+    private static void createForm(long userId, long groupId, Form form, long structureClassNameId) {
         try {
             ServiceContext serviceContext = new ServiceContext();
             Map<Locale, String> nameMap = namesListToMap(form.getFormName().getName());
             Map<Locale, String> descriptionMap = descriptionsListToMap(form.getFormDescription().getDescription());
+            String structureKey = form.getFormDbKey();
+            String structureLayoutKey = structureKey + "_LAYOUT";
 
             DDMStructure ddmStructure = DDMStructureLocalServiceUtil.addStructure(
                     userId,

@@ -903,6 +903,7 @@
     <xs:element name="form">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="form-db-key" type="xs:string"/>
                 <xs:element name="form-data" type="xs:string"/>
                 <xs:element name="form-layout" type="xs:string"/>
                 <xs:element name="form-settings" type="xs:string"/>
