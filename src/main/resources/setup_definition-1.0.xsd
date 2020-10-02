@@ -16,6 +16,7 @@
                 <xs:element ref="customFields" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="deleteLiferayObjects" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="form" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="fragment-collection" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element maxOccurs="1" minOccurs="0" ref="page-templates"/>
             </xs:sequence>
         </xs:complexType>
@@ -942,6 +943,47 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fragment-collection">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fragment" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="description"/>
+            <xs:attribute name="setup-action" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="create"/>
+                        <xs:enumeration value="update"/>
+                        <xs:enumeration value="delete"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fragment">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="html" type="xs:string"/>
+                <xs:element name="css" type="xs:string"/>
+                <xs:element name="js" type="xs:string"/>
+                <xs:element name="configuration" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="name" use="required"/>
+            <xs:attribute type="xs:string" name="entryKey" use="required"/>
+            <xs:attribute name="setup-action" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="create"/>
+                        <xs:enumeration value="update"/>
+                        <xs:enumeration value="delete"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
 

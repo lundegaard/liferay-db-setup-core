@@ -22,7 +22,7 @@
     <inceptionYear>2016</inceptionYear>
 
     <properties>
-        <liferay.version>7.3.0</liferay.version>
+        <liferay.version>7.3.4</liferay.version>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +68,10 @@
         <dependency>
             <groupId>com.liferay</groupId>
             <artifactId>com.liferay.portlet.display.template.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.fragment.api</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.portlet</groupId>
