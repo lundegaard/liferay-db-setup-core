@@ -902,9 +902,18 @@
     </xs:element>
 
     <xs:element name="form">
+        <xs:annotation>
+            <xs:appinfo>Defines a liferay form for setup</xs:appinfo>
+            <xs:documentation xml:lang="en">
+                Form-DB-Key is an unique identifier for the form. If you use a key of an existing form, the form will be overwritten with the new form.
+                Form-data is a string of JSON of form definition. It is taken from the table "DDMStructure" from column "Definition".
+                Form-layout is a string of JSON of form layout. It is taken from the table "DDMStructureLayout" from column "Definition".
+                Form-settings is a string of JSON of form settings. It is taken from the table "DDMFormInstance" from column "Settings_".
+                The name and description of the form are localized and need the attributes "available-locales" and "default-locale" to be set properly.
+            </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="form-db-key" type="xs:string"/>
                 <xs:element name="form-data" type="xs:string"/>
                 <xs:element name="form-layout" type="xs:string"/>
                 <xs:element name="form-settings" type="xs:string"/>
@@ -943,6 +952,16 @@
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
+            <xs:attribute name="form-db-key" type="xs:string" use="required"/>
+            <xs:attribute name="setup-action" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="create"/>
+                        <xs:enumeration value="update"/>
+                        <xs:enumeration value="delete"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
 

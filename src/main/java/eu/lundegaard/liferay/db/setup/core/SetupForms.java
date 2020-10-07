@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.service.DDMFormInstanceLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLayoutLocalServiceUtil;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalServiceUtil;
+import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -49,24 +50,43 @@ public final class SetupForms {
 
     private SetupForms() {}
 
-    public static void setupForms(List<Form> formList, long userId, long groupId) {
+    public static void handleForms(List<Form> formList, long userId, long groupId) {
         for (Form form : formList) {
-            String defaultFormName = getDefaultFormName(form);
-            long structureClassNameId = ClassNameLocalServiceUtil.getClassNameId(DDMFormInstance.class);
-
-            try {
-                DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, form.getFormDbKey());
-                LOG.info("Setup: form " + defaultFormName + " already exists, skipping...");
-            } catch (NoSuchStructureException e) {
-                LOG.info("Setup: creating form " + defaultFormName);
-                createForm(userId, groupId, form, structureClassNameId);
-            } catch (PortalException e) {
-                LOG.error("Error during setup of form " + defaultFormName, e);
+            LOG.info("Executing " + form.getSetupAction() + " on form " + getDefaultFormName(form));
+            switch (form.getSetupAction()) {
+                case "create":
+                    createForm(userId, groupId, form);
+                    break;
+                case "update":
+                    updateForm(userId, groupId, form);
+                    break;
+                case "delete":
+                    deleteForm(groupId, form);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Illegal setup action " + form.getSetupAction());
             }
         }
     }
 
-    private static void createForm(long userId, long groupId, Form form, long structureClassNameId) {
+    public static void createForm(long userId, long groupId, Form form) {
+        String defaultFormName = getDefaultFormName(form);
+        long structureClassNameId = ClassNameLocalServiceUtil.getClassNameId(DDMFormInstance.class);
+
+        try {
+            DDMStructure retrievedStructure =
+                    DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, form.getFormDbKey());
+            LOG.warn("Form " + retrievedStructure.getNameCurrentValue() + " with key " + form.getFormDbKey()
+                    + " already exists, skipping...");
+        } catch (NoSuchStructureException e) {
+            LOG.info("Creating form " + defaultFormName);
+            createFormInstanceInDB(userId, groupId, form, structureClassNameId);
+        } catch (PortalException e) {
+            LOG.error("Error during setup of form " + defaultFormName, e);
+        }
+    }
+
+    private static void createFormInstanceInDB(long userId, long groupId, Form form, long structureClassNameId) {
         try {
             ServiceContext serviceContext = new ServiceContext();
             Map<Locale, String> nameMap = namesListToMap(form.getFormName().getName());
@@ -105,8 +125,107 @@ public final class SetupForms {
                     descriptionMap,
                     form.getFormLayout(),
                     serviceContext);
+
+            LOG.info("Form created successfully");
         } catch (PortalException e) {
             LOG.error("Creating the form threw an error", e);
+        }
+    }
+
+    private static void updateForm(long userId, long groupId, Form form) {
+        String defaultFormName = getDefaultFormName(form);
+        long structureClassNameId = ClassNameLocalServiceUtil.getClassNameId(DDMFormInstance.class);
+
+        try {
+            DDMStructure retrievedStructure =
+                    DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, form.getFormDbKey());
+            LOG.info("Form " + retrievedStructure.getNameCurrentValue() + " with key " + form.getFormDbKey()
+                    + " found, updating...");
+            updateFormInstanceInDB(userId, groupId, form, retrievedStructure.getStructureId());
+        } catch (NoSuchStructureException e) {
+            LOG.warn("Form " + defaultFormName + " not found, cannot be updated");
+        } catch (PortalException e) {
+            LOG.error("Error during update of form " + defaultFormName, e);
+        }
+    }
+
+    private static void updateFormInstanceInDB(long userId, long groupId, Form form, long oldStructureId) {
+        try {
+            Map<Locale, String> nameMap = namesListToMap(form.getFormName().getName());
+            Map<Locale, String> descriptionMap = descriptionsListToMap(form.getFormDescription().getDescription());
+            ServiceContext serviceContext = new ServiceContext();
+
+            DDMStructure ddmStructure = DDMStructureLocalServiceUtil.updateStructure(
+                    userId,
+                    oldStructureId,
+                    0,
+                    nameMap,
+                    descriptionMap,
+                    form.getFormData(),
+                    serviceContext);
+
+            String oldStructureLayoutKey = form.getFormDbKey() + "_LAYOUT";
+            long oldStructureLayoutId = DDMStructureLayoutLocalServiceUtil
+                    .getStructureLayout(groupId, 0, oldStructureLayoutKey).getStructureLayoutId();
+            DDMStructureLayoutLocalServiceUtil.updateStructureLayout(
+                    oldStructureLayoutId,
+                    ddmStructure.getStructureVersion().getStructureVersionId(),
+                    nameMap,
+                    descriptionMap,
+                    form.getFormLayout(),
+                    serviceContext);
+
+            long oldFormInstanceId = DDMFormInstanceLocalServiceUtil.getFormInstances(groupId).stream()
+                    .filter(ddmFormInstance -> ddmFormInstance.getStructureId() == oldStructureId).findFirst()
+                    .orElseThrow(IllegalStateException::new).getFormInstanceId();
+            DDMFormInstanceLocalServiceUtil.updateFormInstance(
+                    oldFormInstanceId,
+                    ddmStructure.getStructureId(),
+                    nameMap,
+                    descriptionMap,
+                    new DDMFormValues(ddmStructure.getDDMForm()),
+                    serviceContext);
+
+            LOG.info("Form updated successfully");
+        } catch (PortalException e) {
+            LOG.error("Updating the form threw an error", e);
+        }
+    }
+
+    private static void deleteForm(long groupId, Form form) {
+        String defaultFormName = getDefaultFormName(form);
+        long structureClassNameId = ClassNameLocalServiceUtil.getClassNameId(DDMFormInstance.class);
+
+        try {
+            DDMStructure retrievedStructure =
+                    DDMStructureLocalServiceUtil.getStructure(groupId, structureClassNameId, form.getFormDbKey());
+            LOG.info("Form " + retrievedStructure.getNameCurrentValue() + " with key " + form.getFormDbKey()
+                    + " found, deleting...");
+            deleteFormInstanceInDB(groupId, form, retrievedStructure.getStructureId());
+        } catch (NoSuchStructureException e) {
+            LOG.warn("Form " + defaultFormName + " not found, cannot be deleted");
+        } catch (PortalException e) {
+            LOG.error("Error during delete of form " + defaultFormName, e);
+        }
+    }
+
+    private static void deleteFormInstanceInDB(long groupId, Form form, long structureId) {
+        try {
+            long formInstanceId = DDMFormInstanceLocalServiceUtil.getFormInstances(groupId).stream()
+                    .filter(ddmFormInstance -> ddmFormInstance.getStructureId() == structureId).findFirst()
+                    .orElseThrow(IllegalStateException::new).getFormInstanceId();
+
+            String structureLayoutKey = form.getFormDbKey() + "_LAYOUT";
+            long oldStructureLayoutId = DDMStructureLayoutLocalServiceUtil
+                    .getStructureLayout(groupId, 0, structureLayoutKey).getStructureLayoutId();
+
+            DDMStructureLocalServiceUtil.deleteDDMStructure(structureId);
+            DDMFormInstanceLocalServiceUtil.deleteDDMFormInstance(formInstanceId);
+            DDMStructureLayoutLocalServiceUtil.deleteStructureLayout(oldStructureLayoutId);
+
+            LOG.info("Form deleted successfully");
+        } catch (PortalException e) {
+            LOG.error("Updating the form threw an error", e);
         }
     }
 

@@ -201,8 +201,8 @@ public final class LiferaySetup {
         }
 
         if (!setup.getForm().isEmpty()) {
-            LOG.info("Setting up " + setup.getForm().size() + " forms");
-            SetupForms.setupForms(setup.getForm(), defaultUserId, groupId);
+            LOG.info("Handling " + setup.getForm().size() + " forms");
+            SetupForms.handleForms(setup.getForm(), defaultUserId, groupId);
         }
 
         LOG.info("Setup finished");
