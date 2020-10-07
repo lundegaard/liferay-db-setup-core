@@ -60,7 +60,7 @@ public class SetupFragments {
                     deleteFragmentCollection(fragmentCollection, groupId);
                     break;
                 default:
-                    throw new IllegalStateException("Illegal setup action " + fragmentCollection.getSetupAction());
+                    throw new IllegalArgumentException("Illegal setup action " + fragmentCollection.getSetupAction());
             }
 
             LOG.info("Setup for fragment collection " + fragmentCollection.getName() + " finished");
@@ -96,7 +96,7 @@ public class SetupFragments {
                             deleteFragment(fragment, groupId, createdCollection);
                             break;
                         default:
-                            throw new IllegalStateException(
+                            throw new IllegalArgumentException(
                                     "Illegal setup action " + fragmentCollection.getSetupAction());
                     }
                 }
@@ -118,6 +118,7 @@ public class SetupFragments {
                 FragmentCollectionLocalServiceUtil.updateFragmentCollection(
                         existingCollection.get().getFragmentCollectionId(), fragmentCollection.getName(),
                         fragmentCollection.getDescription());
+                LOG.info("Collection updated successfully");
             } catch (PortalException e) {
                 LOG.error("Error during updating the collection " + collectionName, e);
             }
@@ -143,6 +144,7 @@ public class SetupFragments {
 
                 FragmentCollectionLocalServiceUtil
                         .deleteFragmentCollection(collection.getFragmentCollectionId());
+                LOG.info("Collection deleted successfully");
             } catch (PortalException e) {
                 LOG.error("Error during deleting the collection " + collectionName, e);
             }
@@ -168,7 +170,7 @@ public class SetupFragments {
         try {
             Optional<FragmentEntry> existingFragment = findFragment(fragment, createdCollection, groupId);
             if (existingFragment.isPresent()) {
-                LOG.info("Fragment " + fragment.getEntryKey() + " already exists in collection "
+                LOG.warn("Fragment " + fragment.getEntryKey() + " already exists in collection "
                         + createdCollection.getName() + ", skipping...");
             } else {
                 FragmentEntryLocalServiceUtil.addFragmentEntry(userId, groupId,
@@ -193,6 +195,7 @@ public class SetupFragments {
                 FragmentEntryLocalServiceUtil.updateFragmentEntry(userId, existingFragment.get().getFragmentEntryId(),
                         fragmentName, fragment.getCss(), fragment.getHtml(), fragment.getJs(),
                         fragment.getConfiguration(), 0);
+                LOG.info("Fragment updated successfully");
             } catch (PortalException e) {
                 LOG.error("Error during updating the fragment " + fragmentName, e);
             }
@@ -217,6 +220,7 @@ public class SetupFragments {
                 } else {
                     FragmentEntryLocalServiceUtil
                             .deleteFragmentEntry(fragmentEntry.getFragmentEntryId());
+                    LOG.info("Fragment deleted successfully");
                 }
             } catch (PortalException e) {
                 LOG.error("Error during deleting the fragment " + fragmentName, e);
