@@ -31,17 +31,18 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.*;
+import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.*;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import eu.lundegaard.liferay.db.setup.LiferaySetup;
 import eu.lundegaard.liferay.db.setup.core.util.CustomFieldSettingUtil;
 import eu.lundegaard.liferay.db.setup.core.util.ResolverUtil;
+import eu.lundegaard.liferay.db.setup.core.util.StringPool;
 import eu.lundegaard.liferay.db.setup.core.util.FieldMapUtil;
 import eu.lundegaard.liferay.db.setup.domain.*;
 import eu.lundegaard.liferay.db.setup.domain.Theme;
@@ -565,7 +566,7 @@ public final class SetupPages {
                     if (layoutTypePortlet.hasPortletId(portletId)) {
                         LOG.debug("Removing portlet " + portletId);
                         layoutTypePortlet.removePortletId(runasUser, portletId);
-                        String rootPortletId = PortletConstants.getRootPortletId(portletId);
+                        String rootPortletId = PortletIdCodec.decodePortletName(portletId);
                         LOG.debug("Root portletId: " + rootPortletId);
                         ResourceLocalServiceUtil.deleteResource(layout.getCompanyId(),
                                 rootPortletId, ResourceConstants.SCOPE_INDIVIDUAL,

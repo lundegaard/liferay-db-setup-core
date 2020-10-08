@@ -12,7 +12,7 @@
 
     <groupId>eu.lundegaard.liferay</groupId>
     <artifactId>liferay-db-setup-core</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <packaging>jar</packaging>
 
     <name>Liferay Portal DB Setup core</name>
@@ -22,7 +22,7 @@
     <inceptionYear>2016</inceptionYear>
 
     <properties>
-        <liferay.version>7.2.0</liferay.version>
+        <liferay.version>7.3.4</liferay.version>
     </properties>
 
     <dependencyManagement>
@@ -68,6 +68,10 @@
         <dependency>
             <groupId>com.liferay</groupId>
             <artifactId>com.liferay.portlet.display.template.api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.liferay</groupId>
+            <artifactId>com.liferay.fragment.api</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.portlet</groupId>

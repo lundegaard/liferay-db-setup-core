@@ -55,6 +55,7 @@ import com.liferay.portlet.display.template.PortletDisplayTemplate;
 import eu.lundegaard.liferay.db.setup.LiferaySetup;
 import eu.lundegaard.liferay.db.setup.core.util.ResolverUtil;
 import eu.lundegaard.liferay.db.setup.core.util.ResourcesUtil;
+import eu.lundegaard.liferay.db.setup.core.util.StringPool;
 import eu.lundegaard.liferay.db.setup.core.util.TaggingUtil;
 import eu.lundegaard.liferay.db.setup.core.util.FieldMapUtil;
 import eu.lundegaard.liferay.db.setup.core.util.WebFolderUtil;
@@ -494,7 +495,7 @@ public final class SetupArticles {
                 // if the folder changed, move it...
                 if (journalArticle.getFolderId() != folderId) {
                     JournalArticleLocalServiceUtil.moveArticle(groupId,
-                            journalArticle.getArticleId(), folderId);
+                            journalArticle.getArticleId(), folderId, serviceContext);
                 }
                 LOG.info("Updated JournalArticle: " + journalArticle.getTitle());
             }

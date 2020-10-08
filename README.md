@@ -11,14 +11,14 @@ First add this dependency into your OSGi module project's `pom.xml`.
 <dependency>
     <groupId>eu.lundegaard.liferay</groupId>
     <artifactId>liferay-db-setup-core</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 </dependency>
 ```
 
 and specify the dependency in your `bnd.bnd` file as a resource to include.
 
 ```properties
-Include-Resource: @liferay-db-setup-core-3.0.0.jar
+Include-Resource: @liferay-db-setup-core-3.1.0.jar
 ```
 
 Second create `UpgradeStepRegistrator` component to register your upgrade steps, e.g.
@@ -147,6 +147,10 @@ Article's content is determined by `path` attribute which defines resource on cl
 You can create/update/set many other artifacts like User, Organization, Page, Portlet placement, Permission, ... See source code.
 
 ## Compatibility
-* Version 3.x.x: Liferay Portal 7.2.x
 
-For older versions of portal use original [Mimacom library](https://github.com/mimacom/liferay-db-setup-core).
+|| Liferay Portal Version || Version ||
+| 7.3.x | 3.1.x |
+| 7.2.x | 3.0.x |
+| older | use original [Mimacom library](https://github.com/mimacom/liferay-db-setup-core) |
+
+
