@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.ClassName;
 import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
@@ -67,6 +68,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by mapa, guno..
@@ -354,6 +356,16 @@ public final class SetupArticles {
             throws SystemException, PortalException, IOException, URISyntaxException {
 
         LOG.info("Adding ADT " + template.getName());
+
+        Optional<ClassName> className =
+                ClassNameLocalServiceUtil.getClassNames(0, ClassNameLocalServiceUtil.getClassNamesCount()).stream()
+                        .filter(cName -> cName.getClassName().equals(template.getClassName())).findFirst();
+
+        if (!className.isPresent()) {
+            throw new IllegalArgumentException(
+                    "The class name " + template.getClassName() + " does not exist within Liferay.");
+        }
+
         long classNameId = PortalUtil.getClassNameId(template.getClassName());
 
         long resourceClassnameId = Validator.isBlank(template.getResourceClassName())
